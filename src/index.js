@@ -6,6 +6,10 @@ import reportWebVitals from "./reportWebVitals"
 
 import store from "./store"
 import { Provider } from "react-redux"
+import { timersInitialized } from "./features/timers/timersSlice"
+import { initTimers } from "./services/timerService"
+
+store.dispatch(timersInitialized(initTimers()))
 
 ReactDOM.render(
 	<React.StrictMode>

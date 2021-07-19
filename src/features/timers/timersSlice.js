@@ -1,5 +1,4 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit"
-import { uniqueId } from "lodash"
 
 const timersAdapter = createEntityAdapter()
 
@@ -20,14 +19,7 @@ const timersSlice = createSlice({
 	name: "timers",
 	initialState,
 	reducers: {
-		timerAdded(state, action) {
-			const timer = {
-				id: uniqueId(),
-				minute: 0,
-				second: 0,
-			}
-			timersAdapter.addOne(timer)
-		},
+		timersInitialized: timersAdapter.addMany,
 		timerSetMinute: {
 			reducer(state, action) {
 				const { timerId, minute } = action.payload
@@ -57,21 +49,8 @@ const timersSlice = createSlice({
 
 export default timersSlice.reducer
 
-export const { timerAdded, timerSetMinute, timerSetSecond } =
+export const { timersInitialized, timerSetMinute, timerSetSecond } =
 	timersSlice.actions
 
-// export const initTimers = () => {
-
-// }
-
-// export const { selectById: selectTimerById } = timersAdapter.getSelectors(
-// 	(state) => state.timers
-// )
-
-// for (let i = 0; i < 3; i++) {
-// 	timersAdapter.addOne({
-// 		id: uniqueId(),
-// 		minute: 0,
-// 		second: 0,
-// 	})
-// }
+export const { selectAll: selectTimers, selectById: selectTimerById } =
+	timersAdapter.getSelectors((state) => state.timers)
