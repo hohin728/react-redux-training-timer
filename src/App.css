@@ -1,7 +1,12 @@
-.timers {
+.timers,
+.control-panel {
 	width: 80%;
 	margin: 0 auto;
 	display: flex;
+}
+
+.control-panel {
+	padding: 10px 20px;
 }
 
 .timer {
