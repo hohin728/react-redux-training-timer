@@ -1,11 +1,6 @@
 import React, { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import {
-	selectTimerById,
-	timerSetMinute,
-	timerSetSecond,
-	timerDeductTime,
-} from "./timersSlice"
+import { selectTimerById, timerSetTime, timerDeductTime } from "./timersSlice"
 import useInterval from "../../hooks/useInterval"
 
 const Timer = ({ id }) => {
@@ -15,12 +10,18 @@ const Timer = ({ id }) => {
 	const dispatch = useDispatch()
 	const timer = useSelector((state) => selectTimerById(state, id))
 
-	const handleMinuteChange = (e) => dispatch(timerSetMinute(id, e.target.value))
-	const handleSecondChange = (e) => dispatch(timerSetSecond(id, e.target.value))
+	const handleTimeChange = (params) => {
+		const {
+			event: {
+				target: { value },
+			},
+			timeUnit,
+		} = params
+		dispatch(timerSetTime(timer.id, value, timeUnit))
+	}
 
 	useInterval(
 		() => {
-			console.log(timer.remainTime)
 			if (timer.remainTime - 1000 >= 0) {
 				dispatch(timerDeductTime({ timerId: timer.id }))
 			} else {
@@ -49,16 +50,16 @@ const Timer = ({ id }) => {
 					type="number"
 					min="0"
 					max="59"
-					id={`timer-${id}-sec`}
-					onChange={(e) => handleMinuteChange(e)}
+					id={`timer-${id}-min`}
+					onChange={(e) => handleTimeChange({ event: e, timeUnit: "minute" })}
 					value={timer.minute}
 				/>
 				<input
 					type="number"
 					min="0"
 					max="59"
-					id={`timer-${id}-min`}
-					onChange={(e) => handleSecondChange(e)}
+					id={`timer-${id}-sec`}
+					onChange={(e) => handleTimeChange({ event: e, timeUnit: "second" })}
 					value={timer.second}
 				/>
 			</div>

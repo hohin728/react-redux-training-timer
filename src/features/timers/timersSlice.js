@@ -1,8 +1,4 @@
-import {
-	createEntityAdapter,
-	createSelector,
-	createSlice,
-} from "@reduxjs/toolkit"
+import { createEntityAdapter, createSlice } from "@reduxjs/toolkit"
 
 const timersAdapter = createEntityAdapter()
 
@@ -12,10 +8,9 @@ const initialState = timersAdapter.getInitialState()
  * {
  *  id: string,
  *  label: string,
- *  minute: number,
- *  second: number,
+ * 	minute: number,
+ * 	second: number
  *  remainTime: number,
- *  timerProcessId: number,
  * }
  */
 
@@ -24,27 +19,18 @@ const timersSlice = createSlice({
 	initialState,
 	reducers: {
 		timersInitialized: timersAdapter.addMany,
-		timerSetMinute: {
+		timerSetTime: {
 			reducer(state, action) {
-				const { timerId, minute } = action.payload
+				const { timerId, value, timeUnit } = action.payload
 				const timer = state.entities[timerId]
-				timer.minute = minute
-			},
-			prepare(timerId, minute) {
-				return {
-					payload: { timerId, minute },
+
+				if (timeUnit === "minute" || timeUnit === "second") {
+					timer[timeUnit] = value
 				}
 			},
-		},
-		timerSetSecond: {
-			reducer(state, action) {
-				const { timerId, second } = action.payload
-				const timer = state.entities[timerId]
-				timer.second = second
-			},
-			prepare(timerId, second) {
+			prepare(timerId, value, timeUnit) {
 				return {
-					payload: { timerId, second },
+					payload: { timerId, value, timeUnit },
 				}
 			},
 		},
@@ -60,12 +46,8 @@ const timersSlice = createSlice({
 
 export default timersSlice.reducer
 
-export const {
-	timersInitialized,
-	timerSetMinute,
-	timerSetSecond,
-	timerDeductTime,
-} = timersSlice.actions
+export const { timersInitialized, timerSetTime, timerDeductTime } =
+	timersSlice.actions
 
 export const { selectAll: selectTimers, selectById: selectTimerById } =
 	timersAdapter.getSelectors((state) => state.timers)
