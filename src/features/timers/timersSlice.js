@@ -27,6 +27,7 @@ const timersSlice = createSlice({
 				if (timeUnit === "minute" || timeUnit === "second") {
 					timer[timeUnit] = value
 				}
+				timer.remainTime = (timer.minute * 60 + timer.second) * 1000
 			},
 			prepare(timerId, value, timeUnit) {
 				return {
