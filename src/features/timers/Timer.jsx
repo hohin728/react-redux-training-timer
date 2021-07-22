@@ -5,6 +5,7 @@ import useInterval from "../../hooks/useInterval"
 
 const Timer = ({ id }) => {
 	const [label, setLabel] = useState("timer label")
+	const [delay, setDelay] = useState(10)
 	const [isRunning, setIsRunning] = useState(false)
 
 	const dispatch = useDispatch()
@@ -20,15 +21,17 @@ const Timer = ({ id }) => {
 		dispatch(timerSetTime(timer.id, value, timeUnit))
 	}
 
+	const handleDelayChange = (e) => setDelay(e.target.value)
+
 	useInterval(
 		() => {
-			if (timer.remainTime - 1000 >= 0) {
-				dispatch(timerDeductTime({ timerId: timer.id }))
+			if (timer.remainTime - delay >= 0) {
+				dispatch(timerDeductTime({ timerId: timer.id, delay }))
 			} else {
 				setIsRunning(false)
 			}
 		},
-		isRunning ? 1000 : null
+		isRunning ? delay : null
 	)
 
 	const startOrPlayTimer = () => setIsRunning((isRunning) => !isRunning)
@@ -64,6 +67,15 @@ const Timer = ({ id }) => {
 				/>
 			</div>
 			<div>Remain Time: {timer.remainTime}</div>
+			<div>
+				<label htmlFor="updateFreq">Update Frequency(millisecond): </label>
+				<input
+					type="number"
+					id="updateFreq"
+					value={delay}
+					onChange={(e) => handleDelayChange(e)}
+				/>
+			</div>
 			<button onClick={startOrPlayTimer}>{isRunning ? "Pause" : "Play"}</button>
 		</div>
 	)

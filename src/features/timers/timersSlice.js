@@ -35,12 +35,20 @@ const timersSlice = createSlice({
 				}
 			},
 		},
-		timerDeductTime(state, action) {
-			const { timerId } = action.payload
-			const timer = state.entities[timerId]
-			if (timer.remainTime - 1000 >= 0) {
-				timer.remainTime -= 1000
-			}
+		timerDeductTime: {
+			reducer(state, action) {
+				const { timerId, delay } = action.payload
+				const timer = state.entities[timerId]
+				if (timer.remainTime - delay >= 0) {
+					timer.remainTime -= delay
+				}
+			},
+			prepare({ timerId, delay }) {
+				if (!delay) {
+					delay = 1000
+				}
+				return { payload: { timerId, delay } }
+			},
 		},
 	},
 })
