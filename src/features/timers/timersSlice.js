@@ -1,4 +1,8 @@
-import { createEntityAdapter, createSlice } from "@reduxjs/toolkit"
+import {
+	createEntityAdapter,
+	createSelector,
+	createSlice,
+} from "@reduxjs/toolkit"
 
 const timersAdapter = createEntityAdapter()
 
@@ -44,13 +48,24 @@ const timersSlice = createSlice({
 				}
 			},
 		},
+		timerDeductTime(state, action) {
+			const { timerId } = action.payload
+			const timer = state.entities[timerId]
+			if (timer.remainTime - 1000 >= 0) {
+				timer.remainTime -= 1000
+			}
+		},
 	},
 })
 
 export default timersSlice.reducer
 
-export const { timersInitialized, timerSetMinute, timerSetSecond } =
-	timersSlice.actions
+export const {
+	timersInitialized,
+	timerSetMinute,
+	timerSetSecond,
+	timerDeductTime,
+} = timersSlice.actions
 
 export const { selectAll: selectTimers, selectById: selectTimerById } =
 	timersAdapter.getSelectors((state) => state.timers)
