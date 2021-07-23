@@ -14,11 +14,11 @@ const ControlPanel = () => {
 	const timer = useSelector((state) => selectTimerById(state, "1"))
 
 	const handleStart = () => {
-		dispatch(timerStatusUpdated({ timerId: timer.id, isRunning: true }))
-		// if (timer.remainTime > 0) {
-		// } else {
-		// 	console.log("The timer is over")
-		// }
+		if (timer.remainTime > 0) {
+			dispatch(timerStatusUpdated({ timerId: timer.id, isRunning: true }))
+		} else {
+			console.log("The timer is over")
+		}
 	}
 
 	const handleDelayChange = (e) => {

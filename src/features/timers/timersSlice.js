@@ -57,7 +57,6 @@ const timersSlice = createSlice({
 			const timer = state.entities[timerId]
 
 			timer.isRunning = isRunning
-			console.log(timer, timerId, isRunning)
 		},
 		timerDelayUpdated(state, action) {
 			const { delay } = action.payload
