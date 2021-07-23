@@ -2,15 +2,17 @@ import { createEntityAdapter, createSlice } from "@reduxjs/toolkit"
 
 const timersAdapter = createEntityAdapter()
 
-const initialState = timersAdapter.getInitialState()
+const initialState = timersAdapter.getInitialState({
+	delay: 10,
+})
 
 /**
  * {
  *  id: string,
- *  label: string,
  * 	minute: number,
- * 	second: number
+ * 	second: number,
  *  remainTime: number,
+ * 	isRunning: boolean
  * }
  */
 
@@ -26,8 +28,8 @@ const timersSlice = createSlice({
 
 				if (timeUnit === "minute" || timeUnit === "second") {
 					timer[timeUnit] = value
+					timer.remainTime = (timer.minute * 60 + timer.second) * 1000
 				}
-				timer.remainTime = (timer.minute * 60 + timer.second) * 1000
 			},
 			prepare(timerId, value, timeUnit) {
 				return {
@@ -50,13 +52,31 @@ const timersSlice = createSlice({
 				return { payload: { timerId, delay } }
 			},
 		},
+		timerStatusUpdated(state, action) {
+			const { timerId, isRunning } = action.payload
+			const timer = state.entities[timerId]
+
+			timer.isRunning = isRunning
+			console.log(timer, timerId, isRunning)
+		},
+		timerDelayUpdated(state, action) {
+			const { delay } = action.payload
+			state.delay = delay
+		},
 	},
 })
 
 export default timersSlice.reducer
 
-export const { timersInitialized, timerSetTime, timerDeductTime } =
-	timersSlice.actions
+export const {
+	timersInitialized,
+	timerSetTime,
+	timerDeductTime,
+	timerStatusUpdated,
+	timerDelayUpdated,
+} = timersSlice.actions
 
 export const { selectAll: selectTimers, selectById: selectTimerById } =
 	timersAdapter.getSelectors((state) => state.timers)
+
+export const selectTimerDelay = (state) => state.timers.delay

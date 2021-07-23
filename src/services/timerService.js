@@ -7,8 +7,9 @@ export const initTimers = () => {
 		const timer = {
 			id: timerId,
 			minute: 0,
-			second: 10,
+			second: 5,
 			remainTime: 0,
+			isRunning: false,
 		}
 		timer.remainTime = (timer.second + timer.minute * 60) * 1000
 		timers.push(timer)

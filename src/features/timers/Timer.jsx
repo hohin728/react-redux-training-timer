@@ -1,12 +1,15 @@
 import React, { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { selectTimerById, timerSetTime, timerDeductTime } from "./timersSlice"
+import {
+	selectTimerById,
+	timerSetTime,
+	timerDeductTime,
+	timerStatusUpdated,
+} from "./timersSlice"
 import useInterval from "../../hooks/useInterval"
 
-const Timer = ({ id }) => {
+const Timer = ({ id, delay }) => {
 	const [label, setLabel] = useState("timer label")
-	const [delay, setDelay] = useState(10)
-	const [isRunning, setIsRunning] = useState(false)
 
 	const dispatch = useDispatch()
 	const timer = useSelector((state) => selectTimerById(state, id))
@@ -21,20 +24,17 @@ const Timer = ({ id }) => {
 		dispatch(timerSetTime(timer.id, value, timeUnit))
 	}
 
-	const handleDelayChange = (e) => setDelay(e.target.value)
-
 	useInterval(
 		() => {
+			console.log(timer.isRunning, "isRunning")
 			if (timer.remainTime - delay >= 0) {
 				dispatch(timerDeductTime({ timerId: timer.id, delay }))
 			} else {
-				setIsRunning(false)
+				dispatch(timerStatusUpdated({ timerId: timer.id, isRunning: false }))
 			}
 		},
-		isRunning ? delay : null
+		timer.isRunning ? delay : null
 	)
-
-	const startOrPlayTimer = () => setIsRunning((isRunning) => !isRunning)
 
 	return (
 		<div className="timer">
@@ -67,16 +67,6 @@ const Timer = ({ id }) => {
 				/>
 			</div>
 			<div>Remain Time: {timer.remainTime}</div>
-			<div>
-				<label htmlFor="updateFreq">Update Frequency(millisecond): </label>
-				<input
-					type="number"
-					id="updateFreq"
-					value={delay}
-					onChange={(e) => handleDelayChange(e)}
-				/>
-			</div>
-			<button onClick={startOrPlayTimer}>{isRunning ? "Pause" : "Play"}</button>
 		</div>
 	)
 }
