@@ -26,14 +26,13 @@ const Timer = ({ id, delay }) => {
 
 	useInterval(
 		() => {
-			console.log(timer.isRunning, "isRunning")
 			if (timer.remainTime - delay >= 0) {
 				dispatch(timerDeductTime({ timerId: timer.id, delay }))
 			} else {
 				dispatch(timerStatusUpdated({ timerId: timer.id, isRunning: false }))
 			}
 		},
-		timer.isRunning ? delay : null
+		timer.isRunning ? delay ?? 1000 : null
 	)
 
 	return (
