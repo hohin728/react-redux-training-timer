@@ -8,6 +8,7 @@ import {
 	selectActiveTimerId,
 	timerSetNextTimer,
 	selectTimerIsRunning,
+	timerResetTimers,
 } from "../features/timers/timersSlice"
 
 const ControlPanel = () => {
@@ -24,19 +25,26 @@ const ControlPanel = () => {
 	}, [activeTimerId])
 
 	const handleStart = () => {
-		// once the start button is clicked, get the next timer
-		dispatch(timerSetNextTimer())
+		if (!activeTimerId) {
+			dispatch(timerSetNextTimer())
+		}
+		dispatch(timerStatusUpdated({ isRunning: !isRunning }))
 	}
 
 	const handleDelayChange = (e) => {
 		dispatch(timerDelayUpdated({ delay: e.target.value }))
 	}
 
+	const handleReset = () => dispatch(timerResetTimers())
+
 	return (
 		<div className={styles.controlPanel}>
 			<div className={styles.buttonsSection}>
 				<button className={styles.controlButton} onClick={handleStart}>
 					{isRunning ? "Pause" : "Start"}
+				</button>
+				<button className={styles.controlButton} onClick={handleReset}>
+					Reset
 				</button>
 			</div>
 			<div className={styles.updateFreqContainer}>

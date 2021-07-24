@@ -1,4 +1,13 @@
-import { uniqueId } from "lodash"
+import { isInteger, uniqueId } from "lodash"
+
+export const calcTimerRemainTime = (params) => {
+	const { minute, second } = params
+
+	if (isInteger(minute) && isInteger(second)) {
+		return (minute * 60 + second) * 1000
+	}
+	return 0
+}
 
 export const initTimers = () => {
 	const timers = []
@@ -10,7 +19,10 @@ export const initTimers = () => {
 			second: 3,
 			remainTime: 0,
 		}
-		timer.remainTime = (timer.second + timer.minute * 60) * 1000
+		timer.remainTime = calcTimerRemainTime({
+			minute: timer.minute,
+			second: timer.second,
+		})
 		timers.push(timer)
 	}
 	return timers
