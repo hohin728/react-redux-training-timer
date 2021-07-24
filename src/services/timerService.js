@@ -7,7 +7,7 @@ export const initTimers = () => {
 		const timer = {
 			id: timerId,
 			minute: 0,
-			second: 5,
+			second: 3,
 			remainTime: 0,
 			isRunning: false,
 		}

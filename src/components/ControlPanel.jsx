@@ -1,24 +1,28 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import {
-	selectTimerById,
 	timerStatusUpdated,
 	selectTimerDelay,
 	timerDelayUpdated,
+	selectActiveTimerId,
+	timerSetNextTimer,
 } from "../features/timers/timersSlice"
 
 const ControlPanel = () => {
 	const dispatch = useDispatch()
 
-	const delay = useSelector((state) => selectTimerDelay(state))
-	const timer = useSelector((state) => selectTimerById(state, "1"))
+	const delay = useSelector(selectTimerDelay)
+	const activeTimerId = useSelector(selectActiveTimerId)
+
+	useEffect(() => {
+		if (activeTimerId) {
+			dispatch(timerStatusUpdated({ timerId: activeTimerId, isRunning: true }))
+		}
+	}, [activeTimerId])
 
 	const handleStart = () => {
-		if (timer.remainTime > 0) {
-			dispatch(timerStatusUpdated({ timerId: timer.id, isRunning: true }))
-		} else {
-			console.log("The timer is over")
-		}
+		// once the start button is clicked, get the next timer
+		dispatch(timerSetNextTimer())
 	}
 
 	const handleDelayChange = (e) => {

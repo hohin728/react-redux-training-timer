@@ -5,6 +5,7 @@ import {
 	timerSetTime,
 	timerDeductTime,
 	timerStatusUpdated,
+	timerSetNextTimer,
 } from "./timersSlice"
 import useInterval from "../../hooks/useInterval"
 
@@ -30,9 +31,10 @@ const Timer = ({ id, delay }) => {
 				dispatch(timerDeductTime({ timerId: timer.id, delay }))
 			} else {
 				dispatch(timerStatusUpdated({ timerId: timer.id, isRunning: false }))
+				dispatch(timerSetNextTimer())
 			}
 		},
-		timer.isRunning ? delay ?? 1000 : null
+		timer.isRunning ? delay : null
 	)
 
 	return (

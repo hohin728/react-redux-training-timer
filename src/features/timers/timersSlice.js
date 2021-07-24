@@ -4,6 +4,7 @@ const timersAdapter = createEntityAdapter()
 
 const initialState = timersAdapter.getInitialState({
 	delay: 10,
+	activeTimerId: null,
 })
 
 /**
@@ -58,6 +59,18 @@ const timersSlice = createSlice({
 
 			timer.isRunning = isRunning
 		},
+		timerSetNextTimer(state) {
+			const timers = Object.values(state.entities)
+			for (const [index, timer] of timers.entries()) {
+				if (timer.remainTime > 0) {
+					state.activeTimerId = timer.id
+					break
+				}
+				if (index === timers.length - 1) {
+					state.activeTimerId = null
+				}
+			}
+		},
 		timerDelayUpdated(state, action) {
 			const { delay } = action.payload
 			state.delay = delay
@@ -72,6 +85,7 @@ export const {
 	timerSetTime,
 	timerDeductTime,
 	timerStatusUpdated,
+	timerSetNextTimer,
 	timerDelayUpdated,
 } = timersSlice.actions
 
@@ -79,3 +93,5 @@ export const { selectAll: selectTimers, selectById: selectTimerById } =
 	timersAdapter.getSelectors((state) => state.timers)
 
 export const selectTimerDelay = (state) => state.timers.delay
+
+export const selectActiveTimerId = (state) => state.timers.activeTimerId
