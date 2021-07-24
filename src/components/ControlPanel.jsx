@@ -1,4 +1,5 @@
 import React, { useEffect } from "react"
+import styles from "../styles/ControlPanel.module.scss"
 import { useSelector, useDispatch } from "react-redux"
 import {
 	timerStatusUpdated,
@@ -30,9 +31,13 @@ const ControlPanel = () => {
 	}
 
 	return (
-		<div className="control-panel">
-			<button onClick={handleStart}>Start</button>
-			<div>
+		<div className={styles.controlPanel}>
+			<div className={styles.buttonsSection}>
+				<button className={styles.controlButton} onClick={handleStart}>
+					Start
+				</button>
+			</div>
+			<div className={styles.updateFreqContainer}>
 				<label htmlFor="updateFreq">Update Frequency(millisecond): </label>
 				<input
 					type="number"

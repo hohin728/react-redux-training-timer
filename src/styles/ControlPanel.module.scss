@@ -1,0 +1,23 @@
+.controlPanel {
+	margin: 0 auto;
+	padding: 10px 20px;
+}
+
+.buttonsSection {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.controlButton {
+	font-size: 1.2rem;
+	padding: 0.5rem 2rem;
+}
+
+.updateFreqContainer {
+	font-size: 0.8rem;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	padding: 1rem;
+}

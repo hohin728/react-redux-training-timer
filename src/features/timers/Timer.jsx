@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import styles from "../../styles/Timer.module.scss"
 import { useSelector, useDispatch } from "react-redux"
 import {
 	selectTimerById,
@@ -38,19 +39,20 @@ const Timer = ({ id, delay }) => {
 	)
 
 	return (
-		<div className="timer">
+		<div className={styles.timerContainer}>
 			<input
 				type="text"
 				onChange={(e) => setLabel(e.target.value)}
 				value={label ?? ""}
 			/>
-			<div className="timer__display">
-				<div className="minute">{timer.minute}</div>
-				<div className="separator">:</div>
-				<div className="seconds">{timer.second}</div>
+			<div className={styles.display}>
+				<div className={styles.displayValue}>{timer.minute}</div>
+				<div className={styles.separator}>:</div>
+				<div className={styles.displayValue}>{timer.second}</div>
 			</div>
-			<div className="timer__input">
+			<div className={styles.inputContainer}>
 				<input
+					className={styles.input}
 					type="number"
 					min="0"
 					max="59"
@@ -59,6 +61,7 @@ const Timer = ({ id, delay }) => {
 					value={timer.minute}
 				/>
 				<input
+					className={styles.input}
 					type="number"
 					min="0"
 					max="59"

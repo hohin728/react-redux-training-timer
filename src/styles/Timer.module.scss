@@ -1,0 +1,31 @@
+.timerContainer {
+	border: 1px black solid;
+	margin: 20px auto;
+	padding: 16px;
+	border-radius: 10px;
+	box-sizing: border-box;
+	max-width: 500px;
+	width: 90%;
+}
+
+.display {
+	display: flex;
+	justify-content: center;
+}
+
+.inputContainer {
+	display: flex;
+}
+
+.input {
+	display: block;
+	min-width: 100px;
+	margin: 0 auto;
+}
+
+.displayValue,
+.separator {
+	min-width: none;
+	text-align: center;
+	padding: 10px;
+}
