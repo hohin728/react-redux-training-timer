@@ -12,9 +12,9 @@ import {
 import useInterval from "../../hooks/useInterval"
 
 const Timer = ({ id, delay }) => {
+	const dispatch = useDispatch()
 	const [label, setLabel] = useState("timer label")
 
-	const dispatch = useDispatch()
 	const timer = useSelector((state) => selectTimerById(state, id))
 	const isRunning = useSelector(selectTimerIsRunning)
 	const activeTimerId = useSelector(selectActiveTimerId)
