@@ -3,9 +3,10 @@ import styles from "../../styles/Timer.module.scss"
 import { useSelector, useDispatch } from "react-redux"
 import {
 	selectTimerById,
+	selectActiveTimerId,
+	selectTimerIsRunning,
 	timerSetTime,
 	timerDeductTime,
-	timerStatusUpdated,
 	timerSetNextTimer,
 } from "./timersSlice"
 import useInterval from "../../hooks/useInterval"
@@ -15,6 +16,8 @@ const Timer = ({ id, delay }) => {
 
 	const dispatch = useDispatch()
 	const timer = useSelector((state) => selectTimerById(state, id))
+	const isRunning = useSelector(selectTimerIsRunning)
+	const activeTimerId = useSelector(selectActiveTimerId)
 
 	const handleTimeChange = (params) => {
 		const {
@@ -31,11 +34,10 @@ const Timer = ({ id, delay }) => {
 			if (timer.remainTime - delay >= 0) {
 				dispatch(timerDeductTime({ timerId: timer.id, delay }))
 			} else {
-				dispatch(timerStatusUpdated({ timerId: timer.id, isRunning: false }))
 				dispatch(timerSetNextTimer())
 			}
 		},
-		timer.isRunning ? delay : null
+		isRunning && activeTimerId && id === activeTimerId ? delay : null
 	)
 
 	return (

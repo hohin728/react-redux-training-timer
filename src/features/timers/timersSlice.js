@@ -3,8 +3,9 @@ import { createEntityAdapter, createSlice } from "@reduxjs/toolkit"
 const timersAdapter = createEntityAdapter()
 
 const initialState = timersAdapter.getInitialState({
-	delay: 10,
+	delay: 1000,
 	activeTimerId: null,
+	isRunning: false,
 })
 
 /**
@@ -13,7 +14,6 @@ const initialState = timersAdapter.getInitialState({
  * 	minute: number,
  * 	second: number,
  *  remainTime: number,
- * 	isRunning: boolean
  * }
  */
 
@@ -54,10 +54,8 @@ const timersSlice = createSlice({
 			},
 		},
 		timerStatusUpdated(state, action) {
-			const { timerId, isRunning } = action.payload
-			const timer = state.entities[timerId]
-
-			timer.isRunning = isRunning
+			const { isRunning } = action.payload
+			state.isRunning = isRunning
 		},
 		timerSetNextTimer(state) {
 			const timers = Object.values(state.entities)
@@ -66,8 +64,10 @@ const timersSlice = createSlice({
 					state.activeTimerId = timer.id
 					break
 				}
+				// reset if the last timer is over
 				if (index === timers.length - 1) {
 					state.activeTimerId = null
+					state.isRunning = false
 				}
 			}
 		},
@@ -95,3 +95,5 @@ export const { selectAll: selectTimers, selectById: selectTimerById } =
 export const selectTimerDelay = (state) => state.timers.delay
 
 export const selectActiveTimerId = (state) => state.timers.activeTimerId
+
+export const selectTimerIsRunning = (state) => state.timers.isRunning

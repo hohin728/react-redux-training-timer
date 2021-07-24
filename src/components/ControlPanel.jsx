@@ -7,17 +7,19 @@ import {
 	timerDelayUpdated,
 	selectActiveTimerId,
 	timerSetNextTimer,
+	selectTimerIsRunning,
 } from "../features/timers/timersSlice"
 
 const ControlPanel = () => {
 	const dispatch = useDispatch()
 
 	const delay = useSelector(selectTimerDelay)
+	const isRunning = useSelector(selectTimerIsRunning)
 	const activeTimerId = useSelector(selectActiveTimerId)
 
 	useEffect(() => {
 		if (activeTimerId) {
-			dispatch(timerStatusUpdated({ timerId: activeTimerId, isRunning: true }))
+			dispatch(timerStatusUpdated({ isRunning: true }))
 		}
 	}, [activeTimerId])
 
@@ -34,7 +36,7 @@ const ControlPanel = () => {
 		<div className={styles.controlPanel}>
 			<div className={styles.buttonsSection}>
 				<button className={styles.controlButton} onClick={handleStart}>
-					Start
+					{isRunning ? "Pause" : "Start"}
 				</button>
 			</div>
 			<div className={styles.updateFreqContainer}>
