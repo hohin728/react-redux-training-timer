@@ -34,6 +34,7 @@ const ControlPanel = () => {
 	useEffect(() => {
 		// reset timers if status changed to STOPPED
 		if (timerStatus === TimerStatus.STOPPED) {
+			musicPlayer.current.seek(0)
 			dispatch(timerResetTimers())
 		}
 	}, [timerStatus, dispatch])

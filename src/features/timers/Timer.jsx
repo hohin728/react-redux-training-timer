@@ -1,5 +1,6 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import styles from "../../styles/Timer.module.scss"
+import useInterval from "../../hooks/useInterval"
 import { useSelector, useDispatch } from "react-redux"
 import {
 	selectTimerById,
@@ -9,12 +10,14 @@ import {
 	timerDeductTime,
 	timerSetNextTimer,
 } from "./timersSlice"
-import useInterval from "../../hooks/useInterval"
 import TimerStatus from "./TimerStatus"
+import ReactHowler from "react-howler"
+import timesUpSfx from "../../audio/timesup.mp3"
 
 const Timer = ({ id, delay }) => {
 	const dispatch = useDispatch()
 	const [label, setLabel] = useState("timer label")
+	const alarmPlayer = useRef(null)
 
 	const timer = useSelector((state) => selectTimerById(state, id))
 	const timerStatus = useSelector(selectTimerStatus)
@@ -36,6 +39,8 @@ const Timer = ({ id, delay }) => {
 			if (timer.remainTime - delay >= 0) {
 				dispatch(timerDeductTime({ timerId: timer.id, delay }))
 			} else {
+				// setAlarmPlayCount((count) => count + 1)
+				alarmPlayer.current.play()
 				dispatch(timerSetNextTimer())
 			}
 		},
@@ -77,6 +82,12 @@ const Timer = ({ id, delay }) => {
 				/>
 			</div>
 			<div>Remain Time: {timer.remainTime}</div>
+			<ReactHowler
+				src={timesUpSfx}
+				playing={false}
+				html5={true}
+				ref={alarmPlayer}
+			/>
 		</div>
 	)
 }
