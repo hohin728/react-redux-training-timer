@@ -1,12 +1,13 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit"
 import { calcTimerRemainTime } from "../../services/timerService"
+import TimerStatus from "./TimerStatus"
 
 const timersAdapter = createEntityAdapter()
 
 const initialState = timersAdapter.getInitialState({
 	delay: 10,
 	activeTimerId: null,
-	isRunning: false,
+	status: TimerStatus.STOPPED,
 })
 
 /**
@@ -17,17 +18,6 @@ const initialState = timersAdapter.getInitialState({
  *  remainTime: number,
  * }
  */
-
-const resetTimers = (state) => {
-	state.activeTimerId = null
-	state.isRunning = false
-	Object.values(state.entities).forEach((timer) => {
-		timer.remainTime = calcTimerRemainTime({
-			minute: timer.minute,
-			second: timer.second,
-		})
-	})
-}
 
 const timersSlice = createSlice({
 	name: "timers",
@@ -66,8 +56,8 @@ const timersSlice = createSlice({
 			},
 		},
 		timerStatusUpdated(state, action) {
-			const { isRunning } = action.payload
-			state.isRunning = isRunning
+			const { status } = action.payload
+			state.status = status
 		},
 		timerSetNextTimer(state) {
 			const timers = Object.values(state.entities)
@@ -78,7 +68,7 @@ const timersSlice = createSlice({
 				}
 				// reset if the last timer is over
 				if (index === timers.length - 1) {
-					resetTimers(state)
+					state.status = TimerStatus.STOPPED
 				}
 			}
 		},
@@ -87,7 +77,14 @@ const timersSlice = createSlice({
 			state.delay = delay
 		},
 		timerResetTimers(state) {
-			resetTimers(state)
+			state.activeTimerId = null
+			state.status = TimerStatus.STOPPED
+			Object.values(state.entities).forEach((timer) => {
+				timer.remainTime = calcTimerRemainTime({
+					minute: timer.minute,
+					second: timer.second,
+				})
+			})
 		},
 	},
 })
@@ -111,4 +108,4 @@ export const selectTimerDelay = (state) => state.timers.delay
 
 export const selectActiveTimerId = (state) => state.timers.activeTimerId
 
-export const selectTimerIsRunning = (state) => state.timers.isRunning
+export const selectTimerStatus = (state) => state.timers.status

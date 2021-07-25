@@ -4,19 +4,20 @@ import { useSelector, useDispatch } from "react-redux"
 import {
 	selectTimerById,
 	selectActiveTimerId,
-	selectTimerIsRunning,
+	selectTimerStatus,
 	timerSetTime,
 	timerDeductTime,
 	timerSetNextTimer,
 } from "./timersSlice"
 import useInterval from "../../hooks/useInterval"
+import TimerStatus from "./TimerStatus"
 
 const Timer = ({ id, delay }) => {
 	const dispatch = useDispatch()
 	const [label, setLabel] = useState("timer label")
 
 	const timer = useSelector((state) => selectTimerById(state, id))
-	const isRunning = useSelector(selectTimerIsRunning)
+	const timerStatus = useSelector(selectTimerStatus)
 	const activeTimerId = useSelector(selectActiveTimerId)
 
 	const handleTimeChange = (params) => {
@@ -38,7 +39,9 @@ const Timer = ({ id, delay }) => {
 				dispatch(timerSetNextTimer())
 			}
 		},
-		isRunning && activeTimerId && id === activeTimerId ? delay : null
+		timerStatus === TimerStatus.RUNNING && activeTimerId && id === activeTimerId
+			? delay
+			: null
 	)
 
 	return (
