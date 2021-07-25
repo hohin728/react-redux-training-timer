@@ -12,6 +12,8 @@ import {
 } from "./timersSlice"
 import useInterval from "../../hooks/useInterval"
 import TimerStatus from "./TimerStatus"
+import { convertTimeFormatForDisplay } from "../../services/timerService"
+import styles from "../../styles/TimerCountdown.module.scss"
 
 const TimerCountdown = ({ alarmPlayer }) => {
 	const dispatch = useDispatch()
@@ -21,6 +23,10 @@ const TimerCountdown = ({ alarmPlayer }) => {
 	const delay = useSelector((state) => selectTimerDelay(state))
 	const timerStatus = useSelector(selectTimerStatus)
 	const lastTimerId = useSelector(selectLastTimerId)
+
+	const timePerUnit = convertTimeFormatForDisplay(timer.remainTime)
+
+	const showTimerDigits = (digit) => (digit < 10 ? "0" + digit : digit)
 
 	useInterval(
 		() => {
@@ -44,7 +50,24 @@ const TimerCountdown = ({ alarmPlayer }) => {
 			: null
 	)
 
-	return <div className="timer-display">{timer.remainTime}</div>
+	return (
+		<div className={`${styles.countdownSection}`}>
+			<div class={`${styles.countdownDisplay}`}>
+				<div className={`${styles.countdownFlex}`}>
+					<div className={`${styles.digits}`}>
+						{showTimerDigits(timePerUnit.minute)}
+					</div>
+					<div className={`${styles.separator}`}>:</div>
+					<div className={`${styles.digits}`}>
+						{showTimerDigits(timePerUnit.second)}
+					</div>
+				</div>
+				<div className={`${styles.digits} ${styles.millisecond}`}>
+					{showTimerDigits(timePerUnit.millisec)}
+				</div>
+			</div>
+		</div>
+	)
 }
 
 export default TimerCountdown

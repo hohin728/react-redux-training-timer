@@ -27,3 +27,23 @@ export const initTimers = () => {
 	}
 	return timers
 }
+
+export const convertTimeFormatForDisplay = (convertMillisec) => {
+	if (!isInteger(convertMillisec) || convertMillisec <= 0) {
+		return {
+			millisec: 0,
+			second: 0,
+			minute: 0,
+		}
+	}
+
+	const millisec = (convertMillisec % 1000) / 10
+	const second = Math.floor(convertMillisec / 1000) % 60
+	const minute = Math.floor(convertMillisec / 1000 / 60) % 60
+
+	return {
+		millisec,
+		second,
+		minute,
+	}
+}
