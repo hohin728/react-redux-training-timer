@@ -26,7 +26,8 @@ const Timer = ({ id, delay }) => {
 			},
 			timeUnit,
 		} = params
-		dispatch(timerSetTime(timer.id, value, timeUnit))
+
+		dispatch(timerSetTime(timer.id, parseInt(value), timeUnit))
 	}
 
 	useInterval(
