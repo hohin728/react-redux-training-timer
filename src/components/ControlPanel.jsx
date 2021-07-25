@@ -74,6 +74,7 @@ const ControlPanel = () => {
 				mute={isMuted}
 				ref={musicPlayer}
 				loop={true}
+				html5={true}
 			/>
 		</div>
 	)
