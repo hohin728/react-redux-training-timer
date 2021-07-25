@@ -1,0 +1,22 @@
+.fullHeight {
+	height: 100%;
+}
+
+.flexContainer {
+	display: flex;
+	flex-direction: column;
+}
+
+.content {
+	flex: 1 0 auto;
+}
+
+.footer {
+	flex-shrink: 0;
+}
+
+.widthContainer {
+	max-width: 600px;
+	width: 90%;
+	margin: 0 auto;
+}

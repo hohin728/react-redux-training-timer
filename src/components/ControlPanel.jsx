@@ -81,11 +81,6 @@ const ControlPanel = () => {
 					Reset
 				</button>
 			</div>
-			<div>
-				<button onClick={handleToggleEnableBgMusic}>
-					{isMuted ? "Unmute" : "Mute"}
-				</button>
-			</div>
 			<div className={styles.updateFreqContainer}>
 				<label htmlFor="updateFreq">Update Frequency(millisecond): </label>
 				<input
@@ -95,12 +90,15 @@ const ControlPanel = () => {
 					onChange={(e) => handleDelayChange(e)}
 				/>
 			</div>
-			<div>
+			<div className="flex">
 				<button
 					onClick={handleHideCountdown}
 					disabled={timerStatus === TimerStatus.RUNNING || !showCountdown}
 				>
 					Close countdown
+				</button>
+				<button onClick={handleToggleEnableBgMusic}>
+					{isMuted ? "Unmute" : "Mute"}
 				</button>
 			</div>
 			<ReactHowler
