@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import styles from "../styles/ControlPanel.module.scss"
 import { useSelector, useDispatch } from "react-redux"
 import {
@@ -10,16 +10,13 @@ import {
 	selectTimerIsRunning,
 	timerResetTimers,
 } from "../features/timers/timersSlice"
-import useSound from "use-sound"
 import muayThaiBgMusic from "../audio/Muay_Thai_Sarama_ROUND_1.mp3"
-import { useState } from "react"
+import ReactHowler from "react-howler"
 
 const ControlPanel = () => {
 	const dispatch = useDispatch()
-	const [enableBgMusic, setEnableBgMusic] = useState(true)
-	const [play, { stop, pause }] = useSound(muayThaiBgMusic, {
-		soundEnabled: enableBgMusic,
-	})
+	const [isMuted, setIsMuted] = useState(false)
+	const musicPlayer = useRef(null)
 
 	const delay = useSelector(selectTimerDelay)
 	const isRunning = useSelector(selectTimerIsRunning)
@@ -27,15 +24,11 @@ const ControlPanel = () => {
 
 	useEffect(() => {
 		if (activeTimerId) {
-			stop()
-			play()
+			// play the music again once timer is changed
+			musicPlayer.current.seek(0)
 			dispatch(timerStatusUpdated({ isRunning: true }))
 		}
-	}, [activeTimerId])
-
-	useEffect(() => {
-		isRunning ? play() : pause()
-	}, [isRunning, play, pause])
+	}, [activeTimerId, dispatch])
 
 	const handleStart = () => {
 		if (!activeTimerId) {
@@ -44,16 +37,12 @@ const ControlPanel = () => {
 		dispatch(timerStatusUpdated({ isRunning: !isRunning }))
 	}
 
-	const handleDelayChange = (e) => {
+	const handleDelayChange = (e) =>
 		dispatch(timerDelayUpdated({ delay: e.target.value }))
-	}
 
-	const handleReset = () => {
-		dispatch(timerResetTimers())
-		stop()
-	}
+	const handleReset = () => dispatch(timerResetTimers())
 
-	const handleEnableBgMusicChange = (e) => setEnableBgMusic(e.target.checked)
+	const handleToggleEnableBgMusic = () => setIsMuted((muted) => !muted)
 
 	return (
 		<div className={styles.controlPanel}>
@@ -66,12 +55,9 @@ const ControlPanel = () => {
 				</button>
 			</div>
 			<div>
-				<label htmlFor="enableBgMusic">Enable background music: </label>
-				<input
-					type="checkbox"
-					checked={enableBgMusic}
-					onChange={(e) => handleEnableBgMusicChange(e)}
-				/>
+				<button onClick={handleToggleEnableBgMusic}>
+					{isMuted ? "Unmute" : "Mute"}
+				</button>
 			</div>
 			<div className={styles.updateFreqContainer}>
 				<label htmlFor="updateFreq">Update Frequency(millisecond): </label>
@@ -82,6 +68,13 @@ const ControlPanel = () => {
 					onChange={(e) => handleDelayChange(e)}
 				/>
 			</div>
+			<ReactHowler
+				src={muayThaiBgMusic}
+				playing={isRunning}
+				mute={isMuted}
+				ref={musicPlayer}
+				loop={true}
+			/>
 		</div>
 	)
 }
