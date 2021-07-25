@@ -1,10 +1,15 @@
-import { createEntityAdapter, createSlice } from "@reduxjs/toolkit"
+import {
+	createEntityAdapter,
+	createSelector,
+	createSlice,
+} from "@reduxjs/toolkit"
 import { calcTimerRemainTime } from "../../services/timerService"
 import TimerStatus from "./TimerStatus"
 
 const timersAdapter = createEntityAdapter()
 
 const initialState = timersAdapter.getInitialState({
+	showCountdown: false,
 	delay: 10,
 	activeTimerId: null,
 	status: TimerStatus.STOPPED,
@@ -86,6 +91,10 @@ const timersSlice = createSlice({
 				})
 			})
 		},
+		timerSetShowCountdown(state, action) {
+			const { showCountdown } = action.payload
+			state.showCountdown = showCountdown
+		},
 	},
 })
 
@@ -99,13 +108,28 @@ export const {
 	timerSetNextTimer,
 	timerDelayUpdated,
 	timerResetTimers,
+	timerSetShowCountdown,
 } = timersSlice.actions
 
-export const { selectAll: selectTimers, selectById: selectTimerById } =
-	timersAdapter.getSelectors((state) => state.timers)
+export const {
+	selectAll: selectTimers,
+	selectById: selectTimerById,
+	selectTotal,
+} = timersAdapter.getSelectors((state) => state.timers)
+
+export const selectShowCountdown = (state) => state.timers.showCountdown
 
 export const selectTimerDelay = (state) => state.timers.delay
 
 export const selectActiveTimerId = (state) => state.timers.activeTimerId
 
 export const selectTimerStatus = (state) => state.timers.status
+
+export const selectLastTimerId = createSelector(
+	selectTimers,
+	selectTotal,
+	(timers, total) => {
+		const lastTimer = Object.values(timers)[total - 1]
+		return lastTimer.id
+	}
+)

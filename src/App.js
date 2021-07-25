@@ -1,10 +1,10 @@
 import "./App.css"
-import TimerList from "./features/timers/TimerList"
+import TimerMain from "./features/timers/TimerMain"
 import ControlPanel from "./components/ControlPanel"
 
 const App = () => (
 	<div className="App">
-		<TimerList />
+		<TimerMain></TimerMain>
 		<ControlPanel></ControlPanel>
 	</div>
 )

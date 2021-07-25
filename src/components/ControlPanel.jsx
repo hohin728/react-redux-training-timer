@@ -9,6 +9,8 @@ import {
 	timerSetNextTimer,
 	selectTimerStatus,
 	timerResetTimers,
+	selectShowCountdown,
+	timerSetShowCountdown,
 } from "../features/timers/timersSlice"
 import TimerStatus from "../features/timers/TimerStatus"
 import muayThaiBgMusic from "../audio/Muay_Thai_Sarama_ROUND_1.mp3"
@@ -22,6 +24,7 @@ const ControlPanel = () => {
 	const delay = useSelector(selectTimerDelay)
 	const timerStatus = useSelector(selectTimerStatus)
 	const activeTimerId = useSelector(selectActiveTimerId)
+	const showCountdown = useSelector(selectShowCountdown)
 
 	useEffect(() => {
 		if (activeTimerId) {
@@ -35,9 +38,12 @@ const ControlPanel = () => {
 		// reset timers if status changed to STOPPED
 		if (timerStatus === TimerStatus.STOPPED) {
 			musicPlayer.current.seek(0)
-			dispatch(timerResetTimers())
 		}
 	}, [timerStatus, dispatch])
+
+	const handleHideCountdown = () => {
+		dispatch(timerSetShowCountdown({ showCountdown: false }))
+	}
 
 	const handleStart = () => {
 		if (!activeTimerId) {
@@ -52,12 +58,16 @@ const ControlPanel = () => {
 				status: newStatus,
 			})
 		)
+		dispatch(timerSetShowCountdown({ showCountdown: true }))
 	}
 
 	const handleDelayChange = (e) =>
 		dispatch(timerDelayUpdated({ delay: e.target.value }))
 
-	const handleReset = () => dispatch(timerResetTimers())
+	const handleReset = () => {
+		dispatch(timerSetShowCountdown({ showCountdown: false }))
+		dispatch(timerResetTimers())
+	}
 
 	const handleToggleEnableBgMusic = () => setIsMuted((muted) => !muted)
 
@@ -84,6 +94,14 @@ const ControlPanel = () => {
 					value={delay ?? 0}
 					onChange={(e) => handleDelayChange(e)}
 				/>
+			</div>
+			<div>
+				<button
+					onClick={handleHideCountdown}
+					disabled={timerStatus === TimerStatus.RUNNING || !showCountdown}
+				>
+					Close countdown
+				</button>
 			</div>
 			<ReactHowler
 				src={muayThaiBgMusic}
