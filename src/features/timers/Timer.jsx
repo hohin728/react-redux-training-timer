@@ -1,5 +1,4 @@
 import React from "react"
-import styles from "../../styles/Timer.module.scss"
 import { useSelector, useDispatch } from "react-redux"
 import {
 	selectTimerById,
@@ -7,9 +6,30 @@ import {
 	timerSetLabel,
 	timerSetMusic,
 } from "./timersSlice"
+import {
+	Box,
+	Paper,
+	FormControl,
+	InputLabel,
+	makeStyles,
+	MenuItem,
+	Select,
+	TextField,
+} from "@material-ui/core"
+
+const useStyles = makeStyles((theme) => ({
+	musicInput: {
+		minWidth: 200,
+	},
+	timerContainer: {
+		borderRadius: 30,
+		padding: "20px 40px",
+	},
+}))
 
 const Timer = ({ id }) => {
 	const dispatch = useDispatch()
+	const classes = useStyles()
 	const timer = useSelector((state) => selectTimerById(state, id))
 
 	const handleTimeChange = (params) => {
@@ -30,51 +50,82 @@ const Timer = ({ id }) => {
 		dispatch(timerSetMusic({ timerId: timer.id, music: e.target.value }))
 
 	return (
-		<div className={styles.timerContainer}>
-			<input
-				type="text"
-				onChange={(e) => handleLabelChange(e)}
-				value={timer.label ?? ""}
-			/>
-			<div className={styles.display}>
-				<div className={styles.displayValue}>{timer.minute}</div>
-				<div className={styles.separator}>:</div>
-				<div className={styles.displayValue}>{timer.second}</div>
-			</div>
-			<div className={styles.inputContainer}>
-				<input
-					className={styles.input}
-					type="number"
-					min="0"
-					max="59"
-					id={`timer-${id}-min`}
-					onChange={(e) => handleTimeChange({ event: e, timeUnit: "minute" })}
-					value={timer.minute}
-				/>
-				<input
-					className={styles.input}
-					type="number"
-					min="0"
-					max="59"
-					id={`timer-${id}-sec`}
-					onChange={(e) => handleTimeChange({ event: e, timeUnit: "second" })}
-					value={timer.second}
-				/>
-			</div>
-			<div style={{ marginTop: "20px" }}>
-				<label htmlFor={`timer-music-${timer.id}`}>Timer Music: </label>
-				<select
-					name="music"
-					id={`timer-music-${timer.id}`}
-					onChange={handleMusicChange}
-				>
-					<option value="">No</option>
-					<option value="Muay_Thai_Sarama_ROUND_1.mp3">
-						Muay Thai Boxing Music
-					</option>
-				</select>
-			</div>
-		</div>
+		<Box m={2}>
+			<Paper
+				elevation={1}
+				variant="outlined"
+				className={classes.timerContainer}
+			>
+				<Box m={1} display="flex" justifyContent="center">
+					<TextField
+						value={timer.label ?? ""}
+						onChange={(e) => handleLabelChange(e)}
+						inputProps={{ style: { textAlign: "center" } }}
+					/>
+				</Box>
+
+				<Box display="flex" alignItems="center" justifyContent="center">
+					<Box m={2}>
+						<FormControl>
+							<TextField
+								id={`timer-${id}-min`}
+								label="Minute"
+								type="number"
+								InputLabelProps={{
+									shrink: true,
+								}}
+								inputProps={{ min: 0, max: 59 }}
+								variant="outlined"
+								onChange={(e) =>
+									handleTimeChange({ event: e, timeUnit: "minute" })
+								}
+								value={timer.minute}
+							/>
+						</FormControl>
+					</Box>
+
+					<Box m={1}>:</Box>
+
+					<Box m={2}>
+						<FormControl>
+							<TextField
+								id={`timer-${id}-sec`}
+								label="Second"
+								type="number"
+								InputLabelProps={{
+									shrink: true,
+								}}
+								inputProps={{ min: 0, max: 59 }}
+								variant="outlined"
+								onChange={(e) =>
+									handleTimeChange({ event: e, timeUnit: "second" })
+								}
+								value={timer.second}
+							/>
+						</FormControl>
+					</Box>
+				</Box>
+
+				<Box></Box>
+				<FormControl>
+					<InputLabel id={`timer-music-${timer.id}-label`}>
+						Timer Music
+					</InputLabel>
+					<Select
+						labelId={`timer-music-${timer.id}-label`}
+						id={`timer-music-${timer.id}`}
+						value={timer.music ?? ""}
+						onChange={handleMusicChange}
+						className={classes.musicInput}
+					>
+						<MenuItem value="">No Music</MenuItem>
+						<MenuItem value="Muay_Thai_Sarama_ROUND_1.mp3">
+							Muay Thai Music
+						</MenuItem>
+					</Select>
+				</FormControl>
+			</Paper>
+		</Box>
 	)
 }
 

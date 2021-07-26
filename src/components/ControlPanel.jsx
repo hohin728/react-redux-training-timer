@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import {
 	timerStatusUpdated,
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }))
 
-const ControlPanel = () => {
+const ControlPanel = ({ setHeightOfControlPanel }) => {
 	const classes = useStyles()
 	const dispatch = useDispatch()
 
@@ -81,8 +81,14 @@ const ControlPanel = () => {
 		dispatch(timerSetLoop({ total: parseInt(e.target.value) }))
 	}
 
+	// get the height of control panel to render the height of main section
+	useEffect(() => {
+		const height = document.getElementById("control-panel").clientHeight
+		setHeightOfControlPanel(height)
+	})
+
 	return (
-		<Paper elevation={3}>
+		<Paper elevation={3} id="control-panel">
 			<Box p={3}>
 				<Box display="flex" justifyContent="center">
 					<Box m={1}>
