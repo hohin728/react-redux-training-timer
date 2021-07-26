@@ -1,11 +1,10 @@
-import React, { useState } from "react"
+import React from "react"
 import styles from "../../styles/Timer.module.scss"
 import { useSelector, useDispatch } from "react-redux"
-import { selectTimerById, timerSetTime } from "./timersSlice"
+import { selectTimerById, timerSetTime, timerSetLabel } from "./timersSlice"
 
 const Timer = ({ id }) => {
 	const dispatch = useDispatch()
-	const [label, setLabel] = useState("timer label")
 	const timer = useSelector((state) => selectTimerById(state, id))
 
 	const handleTimeChange = (params) => {
@@ -19,12 +18,15 @@ const Timer = ({ id }) => {
 		dispatch(timerSetTime(timer.id, parseInt(value), timeUnit))
 	}
 
+	const handleLabelChange = (e) =>
+		dispatch(timerSetLabel({ timerId: timer.id, label: e.target.value }))
+
 	return (
 		<div className={styles.timerContainer}>
 			<input
 				type="text"
-				onChange={(e) => setLabel(e.target.value)}
-				value={label ?? ""}
+				onChange={(e) => handleLabelChange(e)}
+				value={timer.label ?? ""}
 			/>
 			<div className={styles.display}>
 				<div className={styles.displayValue}>{timer.minute}</div>

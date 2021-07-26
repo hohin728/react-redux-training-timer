@@ -74,7 +74,8 @@ const TimerCountdown = ({ alarmPlayer }) => {
 			<div className={`${styles.countdownSection}`}>
 				<div className={`${styles.countdownInfo}`}>
 					<div style={{ textAlign: "center" }}>
-						<p>Timer id: {timer.id}</p>
+						<small>Timer id: {timer.id}</small>
+						<p>{timer.label ?? ""}</p>
 						<p>
 							<span>Round: </span>
 							<span>

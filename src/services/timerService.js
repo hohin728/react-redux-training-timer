@@ -15,6 +15,7 @@ export const initTimers = () => {
 		const timerId = uniqueId()
 		const timer = {
 			id: timerId,
+			label: "timer label " + timerId,
 			minute: 0,
 			second: 3,
 			remainTime: 0,

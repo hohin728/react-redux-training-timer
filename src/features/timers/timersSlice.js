@@ -23,6 +23,7 @@ const initialState = timersAdapter.getInitialState({
 /**
  * {
  *  id: string,
+ * 	label: string,
  * 	minute: number,
  * 	second: number,
  *  remainTime: number,
@@ -34,6 +35,12 @@ const timersSlice = createSlice({
 	initialState,
 	reducers: {
 		timersInitialized: timersAdapter.addMany,
+		timerSetLabel(state, action) {
+			const { timerId, label } = action.payload
+			const timer = state.entities[timerId]
+
+			timer.label = label
+		},
 		timerSetTime: {
 			reducer(state, action) {
 				const { timerId, value, timeUnit } = action.payload
@@ -126,6 +133,7 @@ export default timersSlice.reducer
 
 export const {
 	timersInitialized,
+	timerSetLabel,
 	timerSetTime,
 	timerDeductTime,
 	timerStatusUpdated,
