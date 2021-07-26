@@ -9,7 +9,6 @@ import {
 	timerSetNextTimer,
 	selectTimerStatus,
 	timerResetTimers,
-	selectShowCountdown,
 	timerSetShowCountdown,
 } from "../features/timers/timersSlice"
 import TimerStatus from "../features/timers/TimerStatus"
@@ -24,7 +23,6 @@ const ControlPanel = () => {
 	const delay = useSelector(selectTimerDelay)
 	const timerStatus = useSelector(selectTimerStatus)
 	const activeTimerId = useSelector(selectActiveTimerId)
-	const showCountdown = useSelector(selectShowCountdown)
 
 	useEffect(() => {
 		if (activeTimerId) {
@@ -40,10 +38,6 @@ const ControlPanel = () => {
 			musicPlayer.current.seek(0)
 		}
 	}, [timerStatus, dispatch])
-
-	const handleHideCountdown = () => {
-		dispatch(timerSetShowCountdown({ showCountdown: false }))
-	}
 
 	const handleStart = () => {
 		if (!activeTimerId) {
@@ -83,13 +77,6 @@ const ControlPanel = () => {
 			</div>
 
 			<div className={`${styles.toolbar}`}>
-				{/* hide close countdown button as it's useless by now */}
-				{/* <button
-					onClick={handleHideCountdown}
-					disabled={timerStatus === TimerStatus.RUNNING || !showCountdown}
-				>
-					Close countdown
-				</button> */}
 				<button onClick={handleToggleEnableBgMusic}>
 					{isMuted ? "Unmute" : "Mute"}
 				</button>
