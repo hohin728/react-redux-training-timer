@@ -15,7 +15,7 @@ const initialState = timersAdapter.getInitialState({
 	activeTimerId: null,
 	status: TimerStatus.STOPPED,
 	loop: {
-		current: 0,
+		current: 1,
 		total: 1,
 	},
 })
@@ -95,7 +95,7 @@ const timersSlice = createSlice({
 					second: timer.second,
 				})
 			})
-			state.loop.current = 0
+			state.loop.current = 1
 		},
 		timerResetRemainTime(state) {
 			Object.values(state.entities).forEach((timer) => {

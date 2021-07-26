@@ -71,14 +71,18 @@ const TimerCountdown = ({ alarmPlayer }) => {
 
 	return (
 		<>
-			<div style={{ textAlign: "center" }}>
-				<p>Timer id: {timer.id}</p>
-				<p>
-					{loopCurrent} / {loopTotal}
-				</p>
-			</div>
-
 			<div className={`${styles.countdownSection}`}>
+				<div className={`${styles.countdownInfo}`}>
+					<div style={{ textAlign: "center" }}>
+						<p>Timer id: {timer.id}</p>
+						<p>
+							<span>Round: </span>
+							<span>
+								{loopCurrent} / {loopTotal}
+							</span>
+						</p>
+					</div>
+				</div>
 				<div className={`${styles.countdownDisplay}`}>
 					<div className={`${styles.countdownFlex}`}>
 						<div className={`${styles.digits}`}>
