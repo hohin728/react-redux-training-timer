@@ -19,6 +19,7 @@ export const initTimers = () => {
 			minute: 0,
 			second: 3,
 			remainTime: 0,
+			music: "",
 		}
 		timer.remainTime = calcTimerRemainTime({
 			minute: timer.minute,

@@ -18,6 +18,10 @@ const initialState = timersAdapter.getInitialState({
 		current: 1,
 		total: 1,
 	},
+	mute: {
+		alarm: false,
+		music: false,
+	},
 })
 
 /**
@@ -27,6 +31,7 @@ const initialState = timersAdapter.getInitialState({
  * 	minute: number,
  * 	second: number,
  *  remainTime: number,
+ * 	music: string,
  * }
  */
 
@@ -56,6 +61,12 @@ const timersSlice = createSlice({
 					payload: { timerId, value, timeUnit },
 				}
 			},
+		},
+		timerSetMusic(state, action) {
+			const { timerId, music } = action.payload
+			const timer = state.entities[timerId]
+
+			timer.music = music
 		},
 		timerDeductTime: {
 			reducer(state, action) {
@@ -126,6 +137,16 @@ const timersSlice = createSlice({
 				state.loop.total = total
 			}
 		},
+		timerToggledMute(state, action) {
+			const { muteType } = action.payload
+
+			if (muteType === "alarm") {
+				state.mute.alarm = !state.mute.alarm
+			}
+			if (muteType === "music") {
+				state.mute.music = !state.mute.music
+			}
+		},
 	},
 })
 
@@ -135,6 +156,7 @@ export const {
 	timersInitialized,
 	timerSetLabel,
 	timerSetTime,
+	timerSetMusic,
 	timerDeductTime,
 	timerStatusUpdated,
 	timerSetNextTimer,
@@ -143,6 +165,7 @@ export const {
 	timerResetRemainTime,
 	timerSetShowCountdown,
 	timerSetLoop,
+	timerToggledMute,
 } = timersSlice.actions
 
 export const {
@@ -171,3 +194,5 @@ export const selectLastTimerId = createSelector(
 export const selectTimerLoopCurrentCount = (state) => state.timers.loop.current
 
 export const selectTimerLoopTotalCount = (state) => state.timers.loop.total
+
+export const selectTimerIsMuted = (state) => state.timers.mute.music

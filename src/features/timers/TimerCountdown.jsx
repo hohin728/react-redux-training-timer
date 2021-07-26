@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import {
 	selectTimerById,
@@ -13,14 +13,18 @@ import {
 	selectTimerLoopTotalCount,
 	timerSetLoop,
 	timerResetRemainTime,
+	selectTimerIsMuted,
 } from "./timersSlice"
 import useInterval from "../../hooks/useInterval"
 import TimerStatus from "./TimerStatus"
 import { convertTimeFormatForDisplay } from "../../services/timerService"
 import styles from "../../styles/TimerCountdown.module.scss"
+import muayThaiBgMusic from "../../audio/Muay_Thai_Sarama_ROUND_1.mp3"
+import ReactHowler from "react-howler"
 
 const TimerCountdown = ({ alarmPlayer }) => {
 	const dispatch = useDispatch()
+	const musicPlayer = useRef(null)
 
 	const activeTimerId = useSelector(selectActiveTimerId)
 	const timer = useSelector((state) => selectTimerById(state, activeTimerId))
@@ -29,6 +33,7 @@ const TimerCountdown = ({ alarmPlayer }) => {
 	const lastTimerId = useSelector(selectLastTimerId)
 	const loopCurrent = useSelector(selectTimerLoopCurrentCount)
 	const loopTotal = useSelector(selectTimerLoopTotalCount)
+	const isMuted = useSelector(selectTimerIsMuted)
 
 	const timePerUnit = convertTimeFormatForDisplay(timer.remainTime)
 
@@ -69,6 +74,21 @@ const TimerCountdown = ({ alarmPlayer }) => {
 			: null
 	)
 
+	useEffect(() => {
+		if (activeTimerId) {
+			// play the music again once timer is changed
+			musicPlayer.current.seek(0)
+			dispatch(timerStatusUpdated({ status: TimerStatus.RUNNING }))
+		}
+	}, [activeTimerId, dispatch])
+
+	useEffect(() => {
+		// reset timers if status changed to STOPPED
+		if (timerStatus === TimerStatus.STOPPED) {
+			musicPlayer.current.seek(0)
+		}
+	}, [timerStatus, dispatch])
+
 	return (
 		<>
 			<div className={`${styles.countdownSection}`}>
@@ -99,6 +119,14 @@ const TimerCountdown = ({ alarmPlayer }) => {
 					</div>
 				</div>
 			</div>
+			<ReactHowler
+				src={muayThaiBgMusic}
+				playing={timerStatus === TimerStatus.RUNNING && timer.music !== ""}
+				mute={isMuted}
+				ref={musicPlayer}
+				loop={true}
+				html5={true}
+			/>
 		</>
 	)
 }

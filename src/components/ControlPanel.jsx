@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React from "react"
 import styles from "../styles/ControlPanel.module.scss"
 import { useSelector, useDispatch } from "react-redux"
 import {
@@ -12,35 +12,19 @@ import {
 	timerSetShowCountdown,
 	selectTimerLoopTotalCount,
 	timerSetLoop,
+	timerToggledMute,
+	selectTimerIsMuted,
 } from "../features/timers/timersSlice"
 import TimerStatus from "../features/timers/TimerStatus"
-import muayThaiBgMusic from "../audio/Muay_Thai_Sarama_ROUND_1.mp3"
-import ReactHowler from "react-howler"
 
 const ControlPanel = () => {
 	const dispatch = useDispatch()
-	const [isMuted, setIsMuted] = useState(false)
-	const musicPlayer = useRef(null)
 
 	const delay = useSelector(selectTimerDelay)
 	const timerStatus = useSelector(selectTimerStatus)
 	const activeTimerId = useSelector(selectActiveTimerId)
 	const loopTotal = useSelector(selectTimerLoopTotalCount)
-
-	useEffect(() => {
-		if (activeTimerId) {
-			// play the music again once timer is changed
-			musicPlayer.current.seek(0)
-			dispatch(timerStatusUpdated({ status: TimerStatus.RUNNING }))
-		}
-	}, [activeTimerId, dispatch])
-
-	useEffect(() => {
-		// reset timers if status changed to STOPPED
-		if (timerStatus === TimerStatus.STOPPED) {
-			musicPlayer.current.seek(0)
-		}
-	}, [timerStatus, dispatch])
+	const isMuted = useSelector(selectTimerIsMuted)
 
 	const handleStart = () => {
 		if (!activeTimerId) {
@@ -66,7 +50,8 @@ const ControlPanel = () => {
 		dispatch(timerResetTimers())
 	}
 
-	const handleToggleEnableBgMusic = () => setIsMuted((muted) => !muted)
+	const handleToggleMusicMuted = () =>
+		dispatch(timerToggledMute({ muteType: "music" }))
 
 	const handleLoopChanged = (e) => {
 		dispatch(timerSetLoop({ total: parseInt(e.target.value) }))
@@ -84,7 +69,7 @@ const ControlPanel = () => {
 			</div>
 
 			<div className={`${styles.toolbar}`}>
-				<button onClick={handleToggleEnableBgMusic}>
+				<button onClick={handleToggleMusicMuted}>
 					{isMuted ? "Unmute" : "Mute"}
 				</button>
 
@@ -110,14 +95,6 @@ const ControlPanel = () => {
 					/>
 				</div>
 			</div>
-			<ReactHowler
-				src={muayThaiBgMusic}
-				playing={timerStatus === TimerStatus.RUNNING}
-				mute={isMuted}
-				ref={musicPlayer}
-				loop={true}
-				html5={true}
-			/>
 		</div>
 	)
 }

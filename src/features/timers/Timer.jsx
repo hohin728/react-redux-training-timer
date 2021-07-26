@@ -1,7 +1,12 @@
 import React from "react"
 import styles from "../../styles/Timer.module.scss"
 import { useSelector, useDispatch } from "react-redux"
-import { selectTimerById, timerSetTime, timerSetLabel } from "./timersSlice"
+import {
+	selectTimerById,
+	timerSetTime,
+	timerSetLabel,
+	timerSetMusic,
+} from "./timersSlice"
 
 const Timer = ({ id }) => {
 	const dispatch = useDispatch()
@@ -20,6 +25,9 @@ const Timer = ({ id }) => {
 
 	const handleLabelChange = (e) =>
 		dispatch(timerSetLabel({ timerId: timer.id, label: e.target.value }))
+
+	const handleMusicChange = (e) =>
+		dispatch(timerSetMusic({ timerId: timer.id, music: e.target.value }))
 
 	return (
 		<div className={styles.timerContainer}>
@@ -52,6 +60,19 @@ const Timer = ({ id }) => {
 					onChange={(e) => handleTimeChange({ event: e, timeUnit: "second" })}
 					value={timer.second}
 				/>
+			</div>
+			<div style={{ marginTop: "20px" }}>
+				<label htmlFor={`timer-music-${timer.id}`}>Timer Music: </label>
+				<select
+					name="music"
+					id={`timer-music-${timer.id}`}
+					onChange={handleMusicChange}
+				>
+					<option value="">No</option>
+					<option value="Muay_Thai_Sarama_ROUND_1.mp3">
+						Muay Thai Boxing Music
+					</option>
+				</select>
 			</div>
 		</div>
 	)
