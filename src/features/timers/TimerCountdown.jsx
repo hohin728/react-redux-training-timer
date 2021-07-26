@@ -9,6 +9,10 @@ import {
 	selectTimerStatus,
 	selectLastTimerId,
 	timerStatusUpdated,
+	selectTimerLoopCurrentCount,
+	selectTimerLoopTotalCount,
+	timerSetLoop,
+	timerResetRemainTime,
 } from "./timersSlice"
 import useInterval from "../../hooks/useInterval"
 import TimerStatus from "./TimerStatus"
@@ -23,6 +27,8 @@ const TimerCountdown = ({ alarmPlayer }) => {
 	const delay = useSelector((state) => selectTimerDelay(state))
 	const timerStatus = useSelector(selectTimerStatus)
 	const lastTimerId = useSelector(selectLastTimerId)
+	const loopCurrent = useSelector(selectTimerLoopCurrentCount)
+	const loopTotal = useSelector(selectTimerLoopTotalCount)
 
 	const timePerUnit = convertTimeFormatForDisplay(timer.remainTime)
 
@@ -35,11 +41,24 @@ const TimerCountdown = ({ alarmPlayer }) => {
 			} else {
 				alarmPlayer.current.play()
 
-				// set next timer only if active timer is NOT the last timer
-				if (activeTimerId !== lastTimerId) {
-					dispatch(timerSetNextTimer())
+				/**
+				 * if it's the last timer, check if the loop count reaches total
+				 * if yes, update the status to be stopped
+				 * else dispatch count++ and set next timer
+				 */
+
+				if (activeTimerId === lastTimerId) {
+					// if loop count has reached the end
+					if (loopCurrent < loopTotal) {
+						dispatch(timerSetLoop({ current: loopCurrent + 1 }))
+						// reset remain time of every timer
+						dispatch(timerResetRemainTime())
+						dispatch(timerSetNextTimer())
+					} else {
+						dispatch(timerStatusUpdated({ status: TimerStatus.STOPPED }))
+					}
 				} else {
-					dispatch(timerStatusUpdated({ status: TimerStatus.STOPPED }))
+					dispatch(timerSetNextTimer())
 				}
 			}
 		},
@@ -51,22 +70,31 @@ const TimerCountdown = ({ alarmPlayer }) => {
 	)
 
 	return (
-		<div className={`${styles.countdownSection}`}>
-			<div class={`${styles.countdownDisplay}`}>
-				<div className={`${styles.countdownFlex}`}>
-					<div className={`${styles.digits}`}>
-						{showTimerDigits(timePerUnit.minute)}
+		<>
+			<div style={{ textAlign: "center" }}>
+				<p>Timer id: {timer.id}</p>
+				<p>
+					{loopCurrent} / {loopTotal}
+				</p>
+			</div>
+
+			<div className={`${styles.countdownSection}`}>
+				<div class={`${styles.countdownDisplay}`}>
+					<div className={`${styles.countdownFlex}`}>
+						<div className={`${styles.digits}`}>
+							{showTimerDigits(timePerUnit.minute)}
+						</div>
+						<div className={`${styles.separator}`}>:</div>
+						<div className={`${styles.digits}`}>
+							{showTimerDigits(timePerUnit.second)}
+						</div>
 					</div>
-					<div className={`${styles.separator}`}>:</div>
-					<div className={`${styles.digits}`}>
-						{showTimerDigits(timePerUnit.second)}
+					<div className={`${styles.digits} ${styles.millisecond}`}>
+						{showTimerDigits(timePerUnit.millisec)}
 					</div>
-				</div>
-				<div className={`${styles.digits} ${styles.millisecond}`}>
-					{showTimerDigits(timePerUnit.millisec)}
 				</div>
 			</div>
-		</div>
+		</>
 	)
 }
 

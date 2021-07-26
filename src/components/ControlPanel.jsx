@@ -10,6 +10,8 @@ import {
 	selectTimerStatus,
 	timerResetTimers,
 	timerSetShowCountdown,
+	selectTimerLoopTotalCount,
+	timerSetLoop,
 } from "../features/timers/timersSlice"
 import TimerStatus from "../features/timers/TimerStatus"
 import muayThaiBgMusic from "../audio/Muay_Thai_Sarama_ROUND_1.mp3"
@@ -23,6 +25,7 @@ const ControlPanel = () => {
 	const delay = useSelector(selectTimerDelay)
 	const timerStatus = useSelector(selectTimerStatus)
 	const activeTimerId = useSelector(selectActiveTimerId)
+	const loopTotal = useSelector(selectTimerLoopTotalCount)
 
 	useEffect(() => {
 		if (activeTimerId) {
@@ -65,6 +68,10 @@ const ControlPanel = () => {
 
 	const handleToggleEnableBgMusic = () => setIsMuted((muted) => !muted)
 
+	const handleLoopChanged = (e) => {
+		dispatch(timerSetLoop({ total: parseInt(e.target.value) }))
+	}
+
 	return (
 		<div className={styles.controlPanel}>
 			<div className={styles.buttonsSection}>
@@ -81,13 +88,25 @@ const ControlPanel = () => {
 					{isMuted ? "Unmute" : "Mute"}
 				</button>
 
-				<div className={styles.updateFreqContainer}>
-					<label htmlFor="updateFreq">Update Frequency(millisecond): </label>
+				<div>
+					<label htmlFor="updateFreq">Delay: </label>
 					<input
 						type="number"
 						id="updateFreq"
+						className={`${styles.input}`}
 						value={delay ?? 0}
 						onChange={(e) => handleDelayChange(e)}
+					/>
+				</div>
+
+				<div>
+					<label htmlFor="loop">Loop: </label>
+					<input
+						type="number"
+						id="loop"
+						className={`${styles.input}`}
+						value={loopTotal}
+						onChange={(e) => handleLoopChanged(e)}
 					/>
 				</div>
 			</div>

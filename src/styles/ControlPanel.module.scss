@@ -17,15 +17,12 @@
 	padding: 0.5rem 2rem;
 }
 
-.updateFreqContainer {
-	font-size: 0.8rem;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: flex-end;
-}
-
 .toolbar {
 	display: flex;
 	justify-content: space-around;
 	margin-top: 20px;
+}
+
+.input {
+	width: 50px;
 }

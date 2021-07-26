@@ -5,6 +5,7 @@ import {
 } from "@reduxjs/toolkit"
 import { calcTimerRemainTime } from "../../services/timerService"
 import TimerStatus from "./TimerStatus"
+import { isInteger } from "lodash"
 
 const timersAdapter = createEntityAdapter()
 
@@ -13,6 +14,10 @@ const initialState = timersAdapter.getInitialState({
 	delay: 10,
 	activeTimerId: null,
 	status: TimerStatus.STOPPED,
+	loop: {
+		current: 0,
+		total: 1,
+	},
 })
 
 /**
@@ -90,10 +95,29 @@ const timersSlice = createSlice({
 					second: timer.second,
 				})
 			})
+			state.loop.current = 0
+		},
+		timerResetRemainTime(state) {
+			Object.values(state.entities).forEach((timer) => {
+				timer.remainTime = calcTimerRemainTime({
+					minute: timer.minute,
+					second: timer.second,
+				})
+			})
 		},
 		timerSetShowCountdown(state, action) {
 			const { showCountdown } = action.payload
 			state.showCountdown = showCountdown
+		},
+		timerSetLoop(state, action) {
+			const { current, total } = action.payload
+
+			if (current && isInteger(current)) {
+				state.loop.current = current
+			}
+			if (total && isInteger(total)) {
+				state.loop.total = total
+			}
 		},
 	},
 })
@@ -108,7 +132,9 @@ export const {
 	timerSetNextTimer,
 	timerDelayUpdated,
 	timerResetTimers,
+	timerResetRemainTime,
 	timerSetShowCountdown,
+	timerSetLoop,
 } = timersSlice.actions
 
 export const {
@@ -133,3 +159,7 @@ export const selectLastTimerId = createSelector(
 		return lastTimer.id
 	}
 )
+
+export const selectTimerLoopCurrentCount = (state) => state.timers.loop.current
+
+export const selectTimerLoopTotalCount = (state) => state.timers.loop.total
