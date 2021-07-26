@@ -79,7 +79,7 @@ const TimerCountdown = ({ alarmPlayer }) => {
 			</div>
 
 			<div className={`${styles.countdownSection}`}>
-				<div class={`${styles.countdownDisplay}`}>
+				<div className={`${styles.countdownDisplay}`}>
 					<div className={`${styles.countdownFlex}`}>
 						<div className={`${styles.digits}`}>
 							{showTimerDigits(timePerUnit.minute)}
