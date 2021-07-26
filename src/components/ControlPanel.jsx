@@ -17,6 +17,8 @@ import {
 } from "../features/timers/timersSlice"
 import TimerStatus from "../features/timers/TimerStatus"
 
+import { Button, Box } from "@material-ui/core"
+
 const ControlPanel = () => {
 	const dispatch = useDispatch()
 
@@ -60,12 +62,26 @@ const ControlPanel = () => {
 	return (
 		<div className={styles.controlPanel}>
 			<div className={styles.buttonsSection}>
-				<button className={styles.controlButton} onClick={handleStart}>
-					{timerStatus === TimerStatus.RUNNING ? "Pause" : "Start"}
-				</button>
-				<button className={styles.controlButton} onClick={handleReset}>
-					Reset
-				</button>
+				<Box m={1}>
+					<Button
+						onClick={handleStart}
+						variant="contained"
+						color="primary"
+						size="large"
+					>
+						{timerStatus === TimerStatus.RUNNING ? "Pause" : "Start"}
+					</Button>
+				</Box>
+				<Box m={1}>
+					<Button
+						onClick={handleReset}
+						variant="contained"
+						color="secondary"
+						size="large"
+					>
+						Reset
+					</Button>
+				</Box>
 			</div>
 
 			<div className={`${styles.toolbar}`}>
