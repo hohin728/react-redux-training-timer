@@ -106,7 +106,6 @@ const Timer = ({ id }) => {
 					</Box>
 				</Box>
 
-				<Box></Box>
 				<FormControl>
 					<InputLabel id={`timer-music-${timer.id}-label`}>
 						Timer Music
