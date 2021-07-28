@@ -31,10 +31,22 @@ const App = () => {
 	const [heightOfControlPanel, setHeightOfControlPanel] = useState(0)
 	const [heightOfMainSection, setHeightOfMainSection] = useState(0)
 
-	useEffect(() => {
+	const setHeight = () => {
 		const heightOfMainSection = window.innerHeight - heightOfControlPanel
 		setHeightOfMainSection(heightOfMainSection)
+	}
+
+	useEffect(() => {
+		setHeight()
 	}, [heightOfControlPanel])
+
+	useEffect(() => {
+		window.addEventListener("resize", setHeight)
+
+		return () => {
+			window.removeEventListener("resize", setHeight)
+		}
+	})
 
 	return (
 		<ThemeProvider theme={theme}>
