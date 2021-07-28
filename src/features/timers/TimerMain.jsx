@@ -6,6 +6,7 @@ import { selectShowCountdown, selectTimerStatus } from "./timersSlice"
 import TimerStatus from "./TimerStatus"
 import timesUpSfx from "../../audio/timesup.mp3"
 import ReactHowler from "react-howler"
+import { Container } from "@material-ui/core"
 
 const TimerMain = () => {
 	const timerStatus = useSelector(selectTimerStatus)
@@ -14,7 +15,7 @@ const TimerMain = () => {
 
 	if (timerStatus === TimerStatus.RUNNING || showCountdown) {
 		return (
-			<>
+			<Container maxWidth="sm" style={{ height: "100%" }}>
 				<TimerCountdown alarmPlayer={alarmPlayer}></TimerCountdown>
 				<ReactHowler
 					src={timesUpSfx}
@@ -22,10 +23,14 @@ const TimerMain = () => {
 					html5={true}
 					ref={alarmPlayer}
 				/>
-			</>
+			</Container>
 		)
 	} else {
-		return <TimerList />
+		return (
+			<Container maxWidth="sm">
+				<TimerList />
+			</Container>
+		)
 	}
 }
 

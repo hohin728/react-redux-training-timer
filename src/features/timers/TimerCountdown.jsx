@@ -22,6 +22,8 @@ import styles from "../../styles/TimerCountdown.module.scss"
 import muayThaiBgMusic from "../../audio/Muay_Thai_Sarama_ROUND_1.mp3"
 import ReactHowler from "react-howler"
 
+import { Box } from "@material-ui/core"
+
 const TimerCountdown = ({ alarmPlayer }) => {
 	const dispatch = useDispatch()
 	const musicPlayer = useRef(null)
@@ -90,7 +92,7 @@ const TimerCountdown = ({ alarmPlayer }) => {
 	}, [timerStatus, dispatch])
 
 	return (
-		<>
+		<Box height="100%">
 			<div className={`${styles.countdownSection}`}>
 				<div className={`${styles.countdownInfo}`}>
 					<div style={{ textAlign: "center" }}>
@@ -127,7 +129,7 @@ const TimerCountdown = ({ alarmPlayer }) => {
 				loop={true}
 				html5={true}
 			/>
-		</>
+		</Box>
 	)
 }
 

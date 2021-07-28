@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react"
 import TimerMain from "../features/timers/TimerMain"
 import ControlPanel from "./ControlPanel"
-import { Box, Container, makeStyles } from "@material-ui/core"
+import { Box, makeStyles } from "@material-ui/core"
 
 const useStyles = makeStyles((theme) => ({
-	fullHeight: {
-		height: "100%",
-	},
 	app: {
 		overflow: "hidden",
 	},
@@ -62,20 +59,18 @@ const TimerApp = () => {
 	})
 
 	return (
-		<div className={`App ${classes.fullHeight} ${classes.app}`}>
+		<Box className={`App ${classes.app}`}>
 			<Box
 				className={classes.mainSection}
 				style={{ height: heightOfMainSection }}
 			>
-				<Container maxWidth="sm">
-					<TimerMain />
-				</Container>
+				<TimerMain />
 			</Box>
 
 			<Box className={classes.appBar}>
 				<ControlPanel setHeightOfControlPanel={setHeightOfControlPanel} />
 			</Box>
-		</div>
+		</Box>
 	)
 }
 

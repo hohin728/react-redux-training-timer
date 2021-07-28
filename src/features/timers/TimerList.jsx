@@ -7,7 +7,7 @@ const TimerList = () => {
 	const timers = selectTimers(store.getState())
 
 	return (
-		<main>
+		<main style={{ height: "100%" }}>
 			{timers.map((timer) => (
 				<Timer id={timer.id} key={timer.id} />
 			))}
