@@ -18,14 +18,30 @@ import {
 import useInterval from "../../hooks/useInterval"
 import TimerStatus from "./TimerStatus"
 import { convertTimeFormatForDisplay } from "../../services/timerService"
-import styles from "../../styles/TimerCountdown.module.scss"
 import muayThaiBgMusic from "../../audio/Muay_Thai_Sarama_ROUND_1.mp3"
 import ReactHowler from "react-howler"
 
-import { Box } from "@material-ui/core"
+import { Box, Typography, makeStyles } from "@material-ui/core"
+
+const useStyles = makeStyles({
+	digits: {
+		margin: 10,
+	},
+	millisecond: {
+		position: "absolute",
+		bottom: 5,
+		right: -40,
+	},
+	mainDisplay: {
+		position: "relative",
+		width: "fit-content",
+		margin: "0 auto",
+	},
+})
 
 const TimerCountdown = ({ alarmPlayer }) => {
 	const dispatch = useDispatch()
+	const classes = useStyles()
 	const musicPlayer = useRef(null)
 
 	const activeTimerId = useSelector(selectActiveTimerId)
@@ -92,35 +108,49 @@ const TimerCountdown = ({ alarmPlayer }) => {
 	}, [timerStatus, dispatch])
 
 	return (
-		<Box height="100%">
-			<div className={`${styles.countdownSection}`}>
-				<div className={`${styles.countdownInfo}`}>
-					<div style={{ textAlign: "center" }}>
-						<small>Timer id: {timer.id}</small>
-						<p>{timer.label ?? ""}</p>
-						<p>
-							<span>Round: </span>
-							<span>
-								{loopCurrent} / {loopTotal}
-							</span>
-						</p>
-					</div>
-				</div>
-				<div className={`${styles.countdownDisplay}`}>
-					<div className={`${styles.countdownFlex}`}>
-						<div className={`${styles.digits}`}>
-							{showTimerDigits(timePerUnit.minute)}
-						</div>
-						<div className={`${styles.separator}`}>:</div>
-						<div className={`${styles.digits}`}>
-							{showTimerDigits(timePerUnit.second)}
-						</div>
-					</div>
-					<div className={`${styles.digits} ${styles.millisecond}`}>
+		<Box textAlign="center" height="100%" display="flex" flexDirection="column">
+			<Typography variant="h4" component="div" style={{ marginTop: 10 }}>
+				Round: {loopCurrent} / {loopTotal}
+			</Typography>
+			<Box
+				display="flex"
+				justifyContent="center"
+				flexDirection="column"
+				height="100%"
+			>
+				<Typography variant="h4" component="div" style={{ marginBottom: 10 }}>
+					{timer.label}
+				</Typography>
+
+				<Box
+					display="flex"
+					justifyContent="center"
+					alignItems="center"
+					className={classes.mainDisplay}
+				>
+					<Typography
+						variant="h2"
+						component="div"
+						className={`${classes.digits}`}
+					>
+						{showTimerDigits(timePerUnit.minute)}
+					</Typography>
+					<Typography variant="h3">:</Typography>
+					<Typography
+						variant="h2"
+						component="div"
+						className={`${classes.digits}`}
+					>
+						{showTimerDigits(timePerUnit.second)}
+					</Typography>
+					<Typography
+						variant="h5"
+						className={`${classes.millisecond} ${classes.digits}`}
+					>
 						{showTimerDigits(timePerUnit.millisec)}
-					</div>
-				</div>
-			</div>
+					</Typography>
+				</Box>
+			</Box>
 			<ReactHowler
 				src={muayThaiBgMusic}
 				playing={timerStatus === TimerStatus.RUNNING && timer.music !== ""}
