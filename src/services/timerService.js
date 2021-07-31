@@ -1,5 +1,8 @@
 import { isInteger, uniqueId } from "lodash"
 
+const defaultTimerMinute = 0
+const defaultTimerSecond = 3
+
 export const calcTimerRemainTime = (params) => {
 	const { minute, second } = params
 
@@ -9,22 +12,28 @@ export const calcTimerRemainTime = (params) => {
 	return 0
 }
 
+export const createTimer = (params) => {
+	const id = params && params.timerId ? params.timerId : uniqueId()
+	const timer = {
+		id: id,
+		label: params && params.label ? params.label : "timer label " + id,
+		minute: params && params.minute ? params.minute : defaultTimerMinute,
+		second: params && params.second ? params.second : defaultTimerSecond,
+		remainTime: 0,
+		music: params && params.music ? params.music : "",
+	}
+	timer.remainTime = calcTimerRemainTime({
+		minute: timer.minute,
+		second: timer.second,
+	})
+
+	return timer
+}
+
 export const initTimers = () => {
 	const timers = []
 	for (let i = 0; i < 3; i++) {
-		const timerId = uniqueId()
-		const timer = {
-			id: timerId,
-			label: "timer label " + timerId,
-			minute: 0,
-			second: 3,
-			remainTime: 0,
-			music: "",
-		}
-		timer.remainTime = calcTimerRemainTime({
-			minute: timer.minute,
-			second: timer.second,
-		})
+		const timer = createTimer()
 		timers.push(timer)
 	}
 	return timers

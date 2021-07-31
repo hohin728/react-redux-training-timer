@@ -1,13 +1,13 @@
 import React from "react"
-import store from "../../store"
 import Timer from "./Timer"
+import { useSelector } from "react-redux"
 import { selectTimers } from "./timersSlice"
 
 const TimerList = () => {
-	const timers = selectTimers(store.getState())
+	const timers = useSelector((state) => selectTimers(state))
 
 	return (
-		<main style={{ height: "100%" }}>
+		<main>
 			{timers.map((timer) => (
 				<Timer id={timer.id} key={timer.id} />
 			))}
