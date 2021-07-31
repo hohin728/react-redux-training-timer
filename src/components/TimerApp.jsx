@@ -3,7 +3,7 @@ import TimerMain from "../features/timers/TimerMain"
 import ControlPanel from "./ControlPanel"
 import { Box, makeStyles } from "@material-ui/core"
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
 	app: {
 		overflow: "hidden",
 	},
@@ -16,10 +16,7 @@ const useStyles = makeStyles((theme) => ({
 		boxSizing: "border-box",
 		width: "100%",
 	},
-	mainSection: {
-		overflow: "auto",
-	},
-}))
+})
 
 function debounce(fn, ms) {
 	let timer = null
@@ -60,11 +57,8 @@ const TimerApp = () => {
 
 	return (
 		<Box className={`App ${classes.app}`}>
-			<Box
-				className={classes.mainSection}
-				style={{ height: heightOfMainSection }}
-			>
-				<TimerMain />
+			<Box className={classes.mainSection}>
+				<TimerMain heightOfMainSection={heightOfMainSection} />
 			</Box>
 
 			<Box className={classes.appBar}>

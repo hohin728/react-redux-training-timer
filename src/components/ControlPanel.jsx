@@ -14,6 +14,7 @@ import {
 	timerToggledMute,
 	selectTimerIsMuted,
 	timerAdded,
+	selectShowCountdown,
 } from "../features/timers/timersSlice"
 import TimerStatus from "../features/timers/TimerStatus"
 
@@ -53,6 +54,7 @@ const ControlPanel = ({ setHeightOfControlPanel }) => {
 	const activeTimerId = useSelector(selectActiveTimerId)
 	const loopTotal = useSelector(selectTimerLoopTotalCount)
 	const isMuted = useSelector(selectTimerIsMuted)
+	const showCountdown = useSelector(selectShowCountdown)
 
 	const handleStart = () => {
 		if (!activeTimerId) {
@@ -101,6 +103,7 @@ const ControlPanel = ({ setHeightOfControlPanel }) => {
 						size="medium"
 						style={{ position: "absolute", top: 0, right: 50 }}
 						onClick={handleAddTimer}
+						disabled={showCountdown}
 					>
 						<AddCircleSharpIcon />
 					</IconButton>
@@ -157,6 +160,7 @@ const ControlPanel = ({ setHeightOfControlPanel }) => {
 								type="number"
 								value={loopTotal}
 								onChange={(e) => handleLoopChanged(e)}
+								disabled={showCountdown}
 							/>
 						</FormControl>
 					</Box>

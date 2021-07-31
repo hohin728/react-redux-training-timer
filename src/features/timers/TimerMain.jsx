@@ -6,16 +6,24 @@ import { selectShowCountdown, selectTimerStatus } from "./timersSlice"
 import TimerStatus from "./TimerStatus"
 import timesUpSfx from "../../audio/timesup.mp3"
 import ReactHowler from "react-howler"
-import { Container } from "@material-ui/core"
+import { Box, Container, makeStyles } from "@material-ui/core"
 
-const TimerMain = () => {
+const useStyles = makeStyles({
+	mainSection: {
+		overflowY: "scroll",
+	},
+})
+
+const TimerMain = ({ heightOfMainSection }) => {
+	const classes = useStyles()
+
 	const timerStatus = useSelector(selectTimerStatus)
 	const showCountdown = useSelector(selectShowCountdown)
 	const alarmPlayer = useRef(null)
 
 	if (timerStatus === TimerStatus.RUNNING || showCountdown) {
 		return (
-			<Container maxWidth="sm" style={{ height: "100%" }}>
+			<Container maxWidth="sm" style={{ height: heightOfMainSection }}>
 				<TimerCountdown alarmPlayer={alarmPlayer}></TimerCountdown>
 				<ReactHowler
 					src={timesUpSfx}
@@ -27,9 +35,14 @@ const TimerMain = () => {
 		)
 	} else {
 		return (
-			<Container maxWidth="sm">
-				<TimerList />
-			</Container>
+			<Box
+				style={{ height: heightOfMainSection }}
+				className={classes.mainSection}
+			>
+				<Container maxWidth="sm">
+					<TimerList />
+				</Container>
+			</Box>
 		)
 	}
 }
