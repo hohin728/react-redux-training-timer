@@ -41,6 +41,7 @@ const timersSlice = createSlice({
 	reducers: {
 		timersInitialized: timersAdapter.addMany,
 		timerAdded: timersAdapter.addOne,
+		timerDeleted: timersAdapter.removeOne,
 		timerSetLabel(state, action) {
 			const { timerId, label } = action.payload
 			const timer = state.entities[timerId]
@@ -155,6 +156,7 @@ export default timersSlice.reducer
 export const {
 	timersInitialized,
 	timerAdded,
+	timerDeleted,
 	timerSetLabel,
 	timerSetTime,
 	timerSetMusic,

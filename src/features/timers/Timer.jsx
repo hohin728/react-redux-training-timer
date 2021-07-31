@@ -5,6 +5,7 @@ import {
 	timerSetTime,
 	timerSetLabel,
 	timerSetMusic,
+	timerDeleted,
 } from "./timersSlice"
 import {
 	Box,
@@ -15,9 +16,11 @@ import {
 	MenuItem,
 	Select,
 	TextField,
+	IconButton,
 } from "@material-ui/core"
+import HighlightOffIcon from "@material-ui/icons/HighlightOff"
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
 	musicInput: {
 		minWidth: 200,
 	},
@@ -25,7 +28,17 @@ const useStyles = makeStyles((theme) => ({
 		borderRadius: 30,
 		padding: "20px 40px",
 	},
-}))
+	deleteButton: {
+		opacity: 0.2,
+		position: "absolute",
+		top: 15,
+		right: 20,
+		transition: "opacity 0.5s ease",
+		"&:hover": {
+			opacity: 1,
+		},
+	},
+})
 
 const Timer = ({ id }) => {
 	const dispatch = useDispatch()
@@ -49,13 +62,24 @@ const Timer = ({ id }) => {
 	const handleMusicChange = (e) =>
 		dispatch(timerSetMusic({ timerId: timer.id, music: e.target.value }))
 
+	const handleDeleteTimer = () => dispatch(timerDeleted(timer.id))
+
 	return (
 		<Box m={2}>
 			<Paper
 				elevation={1}
 				variant="outlined"
 				className={classes.timerContainer}
+				style={{ position: "relative" }}
 			>
+				<IconButton
+					onClick={handleDeleteTimer}
+					className={classes.deleteButton}
+					size="small"
+				>
+					<HighlightOffIcon fontSize="small" />
+				</IconButton>
+
 				<Box m={1} display="flex" justifyContent="center">
 					<TextField
 						value={timer.label ?? ""}
