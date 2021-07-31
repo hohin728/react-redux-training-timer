@@ -20,13 +20,22 @@ import {
 } from "@material-ui/core"
 import HighlightOffIcon from "@material-ui/icons/HighlightOff"
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
 	musicInput: {
 		minWidth: 200,
 	},
 	timerContainer: {
 		borderRadius: 30,
-		padding: "20px 40px",
+		padding: "10px 20px",
+		[theme.breakpoints.up("sm")]: {
+			padding: "20px 40px",
+		},
+	},
+	timerToolbar: {
+		justifyContent: "center",
+		[theme.breakpoints.up("sm")]: {
+			justifyContent: "flex-start",
+		},
 	},
 	deleteButton: {
 		opacity: 0.2,
@@ -34,11 +43,12 @@ const useStyles = makeStyles({
 		top: 15,
 		right: 20,
 		transition: "opacity 0.5s ease",
+		zIndex: 2,
 		"&:hover": {
 			opacity: 1,
 		},
 	},
-})
+}))
 
 const Timer = ({ id }) => {
 	const dispatch = useDispatch()
@@ -65,7 +75,7 @@ const Timer = ({ id }) => {
 	const handleDeleteTimer = () => dispatch(timerDeleted(timer.id))
 
 	return (
-		<Box m={2}>
+		<Box my={2}>
 			<Paper
 				elevation={1}
 				variant="outlined"
@@ -89,7 +99,7 @@ const Timer = ({ id }) => {
 				</Box>
 
 				<Box display="flex" alignItems="center" justifyContent="center">
-					<Box m={2}>
+					<Box m={1}>
 						<FormControl>
 							<TextField
 								id={`timer-${id}-min`}
@@ -110,7 +120,7 @@ const Timer = ({ id }) => {
 
 					<Box m={1}>:</Box>
 
-					<Box m={2}>
+					<Box m={1}>
 						<FormControl>
 							<TextField
 								id={`timer-${id}-sec`}
@@ -130,23 +140,25 @@ const Timer = ({ id }) => {
 					</Box>
 				</Box>
 
-				<FormControl>
-					<InputLabel id={`timer-music-${timer.id}-label`}>
-						Timer Music
-					</InputLabel>
-					<Select
-						labelId={`timer-music-${timer.id}-label`}
-						id={`timer-music-${timer.id}`}
-						value={timer.music ?? ""}
-						onChange={handleMusicChange}
-						className={classes.musicInput}
-					>
-						<MenuItem value="">No Music</MenuItem>
-						<MenuItem value="Muay_Thai_Sarama_ROUND_1.mp3">
-							Muay Thai Music
-						</MenuItem>
-					</Select>
-				</FormControl>
+				<Box display="flex" className={classes.timerToolbar}>
+					<FormControl>
+						<InputLabel id={`timer-music-${timer.id}-label`}>
+							Timer Music
+						</InputLabel>
+						<Select
+							labelId={`timer-music-${timer.id}-label`}
+							id={`timer-music-${timer.id}`}
+							value={timer.music ?? ""}
+							onChange={handleMusicChange}
+							className={classes.musicInput}
+						>
+							<MenuItem value="">No Music</MenuItem>
+							<MenuItem value="Muay_Thai_Sarama_ROUND_1.mp3">
+								Muay Thai Music
+							</MenuItem>
+						</Select>
+					</FormControl>
+				</Box>
 			</Paper>
 		</Box>
 	)

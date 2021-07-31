@@ -38,7 +38,23 @@ import { createTimer } from "../services/timerService"
 
 const useStyles = makeStyles((theme) => ({
 	formControl: {
-		width: 150,
+		width: 125,
+	},
+	controlPanelContainer: {
+		position: "relative",
+		padding: theme.spacing(1),
+		[theme.breakpoints.up("sm")]: {
+			padding: theme.spacing(3),
+		},
+	},
+	addButton: {
+		position: "absolute",
+		top: 0,
+		right: 0,
+		zIndex: 2,
+		[theme.breakpoints.up("sm")]: {
+			right: 50,
+		},
 	},
 	toolbar: {
 		marginTop: 16,
@@ -97,73 +113,71 @@ const ControlPanel = ({ setHeightOfControlPanel }) => {
 
 	return (
 		<Paper elevation={3} id="control-panel">
-			<Container maxWidth="md" style={{ position: "relative" }}>
-				<Box p={3}>
-					<IconButton
-						size="medium"
-						style={{ position: "absolute", top: 0, right: 50 }}
-						onClick={handleAddTimer}
-						disabled={showCountdown}
-					>
-						<AddCircleSharpIcon />
+			<Container maxWidth="md" className={classes.controlPanelContainer}>
+				<IconButton
+					size="medium"
+					onClick={handleAddTimer}
+					disabled={showCountdown}
+					className={classes.addButton}
+				>
+					<AddCircleSharpIcon />
+				</IconButton>
+
+				<Box display="flex" justifyContent="center">
+					<Box m={1}>
+						<Button
+							onClick={handleStart}
+							variant="contained"
+							color="primary"
+							size="large"
+						>
+							{timerStatus === TimerStatus.RUNNING ? "Pause" : "Start"}
+						</Button>
+					</Box>
+					<Box m={1}>
+						<Button
+							onClick={handleReset}
+							variant="contained"
+							color="secondary"
+							size="large"
+						>
+							Reset
+						</Button>
+					</Box>
+				</Box>
+
+				<Box
+					display="flex"
+					justifyContent="space-around"
+					className={classes.toolbar}
+				>
+					<IconButton onClick={handleToggleMusicMuted}>
+						{isMuted ? <VolumeOffRoundedIcon /> : <VolumeUpRoundedIcon />}
 					</IconButton>
 
-					<Box display="flex" justifyContent="center">
-						<Box m={1}>
-							<Button
-								onClick={handleStart}
-								variant="contained"
-								color="primary"
-								size="large"
-							>
-								{timerStatus === TimerStatus.RUNNING ? "Pause" : "Start"}
-							</Button>
-						</Box>
-						<Box m={1}>
-							<Button
-								onClick={handleReset}
-								variant="contained"
-								color="secondary"
-								size="large"
-							>
-								Reset
-							</Button>
-						</Box>
-					</Box>
+					<FormControl className={classes.formControl}>
+						<InputLabel>Refresh rate</InputLabel>
+						<Select
+							id="updateFreq"
+							value={delay}
+							onChange={(e) => handleDelayChange(e)}
+						>
+							<MenuItem value={10}>10</MenuItem>
+							<MenuItem value={100}>100</MenuItem>
+							<MenuItem value={1000}>1000</MenuItem>
+						</Select>
+					</FormControl>
 
-					<Box
-						display="flex"
-						justifyContent="space-around"
-						className={classes.toolbar}
-					>
-						<IconButton onClick={handleToggleMusicMuted}>
-							{isMuted ? <VolumeOffRoundedIcon /> : <VolumeUpRoundedIcon />}
-						</IconButton>
-
-						<FormControl className={classes.formControl}>
-							<InputLabel>Frequency (ms)</InputLabel>
-							<Select
-								id="updateFreq"
-								value={delay}
-								onChange={(e) => handleDelayChange(e)}
-							>
-								<MenuItem value={10}>10</MenuItem>
-								<MenuItem value={100}>100</MenuItem>
-								<MenuItem value={1000}>1000</MenuItem>
-							</Select>
-						</FormControl>
-
-						<FormControl className={classes.formControl}>
-							<TextField
-								id="loop"
-								label="No. of rounds"
-								type="number"
-								value={loopTotal}
-								onChange={(e) => handleLoopChanged(e)}
-								disabled={showCountdown}
-							/>
-						</FormControl>
-					</Box>
+					<FormControl className={classes.formControl}>
+						<TextField
+							id="loop"
+							label="No. of rounds"
+							type="number"
+							value={loopTotal}
+							onChange={(e) => handleLoopChanged(e)}
+							disabled={showCountdown}
+						/>
+					</FormControl>
 				</Box>
 			</Container>
 		</Paper>
