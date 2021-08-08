@@ -2,8 +2,6 @@ import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import {
 	timerStatusUpdated,
-	selectTimerDelay,
-	timerDelayUpdated,
 	selectActiveTimerId,
 	timerSetNextTimer,
 	selectTimerStatus,
@@ -24,8 +22,6 @@ import {
 	Box,
 	Container,
 	Paper,
-	InputLabel,
-	MenuItem,
 	FormControl,
 	makeStyles,
 	TextField,
@@ -33,7 +29,8 @@ import {
 import VolumeOffRoundedIcon from "@material-ui/icons/VolumeOffRounded"
 import VolumeUpRoundedIcon from "@material-ui/icons/VolumeUpRounded"
 import AddCircleSharpIcon from "@material-ui/icons/AddCircleSharp"
-import { Select } from "@material-ui/core"
+import SettingsIcon from "@material-ui/icons/Settings"
+
 import { createTimer } from "../services/timerService"
 
 const useStyles = makeStyles((theme) => ({
@@ -61,11 +58,10 @@ const useStyles = makeStyles((theme) => ({
 	},
 }))
 
-const ControlPanel = ({ setHeightOfControlPanel }) => {
+const ControlPanel = ({ setHeightOfControlPanel, handleModalStatus }) => {
 	const classes = useStyles()
 	const dispatch = useDispatch()
 
-	const delay = useSelector(selectTimerDelay)
 	const timerStatus = useSelector(selectTimerStatus)
 	const activeTimerId = useSelector(selectActiveTimerId)
 	const loopTotal = useSelector(selectTimerLoopTotalCount)
@@ -87,9 +83,6 @@ const ControlPanel = ({ setHeightOfControlPanel }) => {
 		)
 		dispatch(timerSetShowCountdown({ showCountdown: true }))
 	}
-
-	const handleDelayChange = (e) =>
-		dispatch(timerDelayUpdated({ delay: e.target.value }))
 
 	const handleReset = () => {
 		dispatch(timerSetShowCountdown({ showCountdown: false }))
@@ -119,6 +112,7 @@ const ControlPanel = ({ setHeightOfControlPanel }) => {
 					onClick={handleAddTimer}
 					disabled={showCountdown}
 					className={classes.addButton}
+					color="primary"
 				>
 					<AddCircleSharpIcon />
 				</IconButton>
@@ -151,22 +145,15 @@ const ControlPanel = ({ setHeightOfControlPanel }) => {
 					justifyContent="space-around"
 					className={classes.toolbar}
 				>
-					<IconButton onClick={handleToggleMusicMuted}>
-						{isMuted ? <VolumeOffRoundedIcon /> : <VolumeUpRoundedIcon />}
-					</IconButton>
+					<Box display="flex" justifyContent="space-between">
+						<IconButton onClick={(e) => handleModalStatus(e, true)}>
+							<SettingsIcon />
+						</IconButton>
 
-					<FormControl className={classes.formControl}>
-						<InputLabel>Refresh rate</InputLabel>
-						<Select
-							id="updateFreq"
-							value={delay}
-							onChange={(e) => handleDelayChange(e)}
-						>
-							<MenuItem value={10}>10</MenuItem>
-							<MenuItem value={100}>100</MenuItem>
-							<MenuItem value={1000}>1000</MenuItem>
-						</Select>
-					</FormControl>
+						<IconButton onClick={handleToggleMusicMuted}>
+							{isMuted ? <VolumeOffRoundedIcon /> : <VolumeUpRoundedIcon />}
+						</IconButton>
+					</Box>
 
 					<FormControl className={classes.formControl}>
 						<TextField
