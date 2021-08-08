@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
 			justifyContent: "flex-start",
 		},
 	},
+	timerInput: {
+		minWidth: 60,
+	},
 	deleteButton: {
 		opacity: 0.2,
 		position: "absolute",
@@ -100,43 +103,39 @@ const Timer = ({ id }) => {
 
 				<Box display="flex" alignItems="center" justifyContent="center">
 					<Box m={1}>
-						<FormControl>
-							<TextField
-								id={`timer-${id}-min`}
-								label="Minute"
-								type="number"
-								InputLabelProps={{
-									shrink: true,
-								}}
-								inputProps={{ min: 0, max: 59 }}
-								variant="outlined"
-								onChange={(e) =>
-									handleTimeChange({ event: e, timeUnit: "minute" })
-								}
-								value={timer.minute}
-							/>
-						</FormControl>
+						<TextField
+							id={`timer-${id}-min`}
+							label="Minute"
+							type="number"
+							InputLabelProps={{
+								shrink: true,
+							}}
+							inputProps={{ min: 0, max: 59, className: classes.timerInput }}
+							variant="outlined"
+							onChange={(e) =>
+								handleTimeChange({ event: e, timeUnit: "minute" })
+							}
+							value={timer.minute}
+						/>
 					</Box>
 
 					<Box m={1}>:</Box>
 
 					<Box m={1}>
-						<FormControl>
-							<TextField
-								id={`timer-${id}-sec`}
-								label="Second"
-								type="number"
-								InputLabelProps={{
-									shrink: true,
-								}}
-								inputProps={{ min: 0, max: 59 }}
-								variant="outlined"
-								onChange={(e) =>
-									handleTimeChange({ event: e, timeUnit: "second" })
-								}
-								value={timer.second}
-							/>
-						</FormControl>
+						<TextField
+							id={`timer-${id}-sec`}
+							label="Second"
+							type="number"
+							InputLabelProps={{
+								shrink: true,
+							}}
+							variant="outlined"
+							inputProps={{ min: 0, max: 59, className: classes.timerInput }}
+							onChange={(e) =>
+								handleTimeChange({ event: e, timeUnit: "second" })
+							}
+							value={timer.second}
+						/>
 					</Box>
 				</Box>
 

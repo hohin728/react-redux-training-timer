@@ -163,6 +163,7 @@ const ControlPanel = ({ setHeightOfControlPanel, handleModalStatus }) => {
 							value={loopTotal}
 							onChange={(e) => handleLoopChanged(e)}
 							disabled={showCountdown}
+							size="small"
 						/>
 					</FormControl>
 				</Box>
