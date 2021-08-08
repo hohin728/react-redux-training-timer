@@ -143,12 +143,14 @@ const TimerCountdown = ({ alarmPlayer }) => {
 					>
 						{showTimerDigits(timePerUnit.second)}
 					</Typography>
-					<Typography
-						variant="h5"
-						className={`${classes.millisecond} ${classes.digits}`}
-					>
-						{showTimerDigits(timePerUnit.millisec)}
-					</Typography>
+					{delay < 1000 && (
+						<Typography
+							variant="h5"
+							className={`${classes.millisecond} ${classes.digits}`}
+						>
+							{showTimerDigits(timePerUnit.millisec)}
+						</Typography>
+					)}
 				</Box>
 			</Box>
 			<ReactHowler

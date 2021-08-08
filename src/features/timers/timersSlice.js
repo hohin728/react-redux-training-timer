@@ -11,7 +11,7 @@ const timersAdapter = createEntityAdapter()
 
 const initialState = timersAdapter.getInitialState({
 	showCountdown: false,
-	delay: 10,
+	delay: 1000,
 	activeTimerId: null,
 	status: TimerStatus.STOPPED,
 	loop: {
