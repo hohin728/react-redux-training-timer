@@ -13,6 +13,7 @@ const initialState = timersAdapter.getInitialState({
 	showCountdown: false,
 	delay: 1000,
 	activeTimerId: null,
+	activeTimerMusic: "",
 	status: TimerStatus.STOPPED,
 	loop: {
 		current: 1,
@@ -93,6 +94,7 @@ const timersSlice = createSlice({
 			for (const [index, timer] of timers.entries()) {
 				if (timer.remainTime > 0) {
 					state.activeTimerId = timer.id
+					state.activeTimerMusic = timer.music
 					break
 				}
 				// reset if the last timer is over
@@ -107,6 +109,7 @@ const timersSlice = createSlice({
 		},
 		timerResetTimers(state) {
 			state.activeTimerId = null
+			state.activeTimerMusic = ""
 			state.status = TimerStatus.STOPPED
 			Object.values(state.entities).forEach((timer) => {
 				timer.remainTime = calcTimerRemainTime({
@@ -199,3 +202,5 @@ export const selectTimerLoopCurrentCount = (state) => state.timers.loop.current
 export const selectTimerLoopTotalCount = (state) => state.timers.loop.total
 
 export const selectTimerIsMuted = (state) => state.timers.mute.music
+
+export const selectActiveTimerMusic = (state) => state.timers.activeTimerMusic

@@ -20,7 +20,8 @@ export const createTimer = (params) => {
 		minute: params && params.minute ? params.minute : defaultTimerMinute,
 		second: params && params.second ? params.second : defaultTimerSecond,
 		remainTime: 0,
-		music: params && params.music ? params.music : "",
+		music:
+			params && params.music ? params.music : "Muay_Thai_Sarama_ROUND_1.mp3",
 	}
 	timer.remainTime = calcTimerRemainTime({
 		minute: timer.minute,

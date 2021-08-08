@@ -3,6 +3,7 @@ import TimerMain from "../features/timers/TimerMain"
 import ControlPanel from "./ControlPanel"
 import Settings from "./Settings"
 import { Box, makeStyles } from "@material-ui/core"
+import MusicPlayer from "./MusicPlayer"
 
 const useStyles = makeStyles({
 	app: {
@@ -75,6 +76,8 @@ const TimerApp = () => {
 					handleModalStatus={handleModalStatus}
 				/>
 			</Box>
+
+			<MusicPlayer />
 
 			<Settings open={modalIsOpen} handleOpen={handleModalStatus} />
 		</Box>

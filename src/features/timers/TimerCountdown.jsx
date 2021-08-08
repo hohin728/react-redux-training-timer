@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React from "react"
 import { useSelector, useDispatch } from "react-redux"
 import {
 	selectTimerById,
@@ -13,13 +13,10 @@ import {
 	selectTimerLoopTotalCount,
 	timerSetLoop,
 	timerResetRemainTime,
-	selectTimerIsMuted,
 } from "./timersSlice"
 import useInterval from "../../hooks/useInterval"
 import TimerStatus from "./TimerStatus"
 import { convertTimeFormatForDisplay } from "../../services/timerService"
-import muayThaiBgMusic from "../../audio/Muay_Thai_Sarama_ROUND_1.mp3"
-import ReactHowler from "react-howler"
 
 import { Box, Typography, makeStyles } from "@material-ui/core"
 
@@ -42,7 +39,6 @@ const useStyles = makeStyles({
 const TimerCountdown = ({ alarmPlayer }) => {
 	const dispatch = useDispatch()
 	const classes = useStyles()
-	const musicPlayer = useRef(null)
 
 	const activeTimerId = useSelector(selectActiveTimerId)
 	const timer = useSelector((state) => selectTimerById(state, activeTimerId))
@@ -51,7 +47,6 @@ const TimerCountdown = ({ alarmPlayer }) => {
 	const lastTimerId = useSelector(selectLastTimerId)
 	const loopCurrent = useSelector(selectTimerLoopCurrentCount)
 	const loopTotal = useSelector(selectTimerLoopTotalCount)
-	const isMuted = useSelector(selectTimerIsMuted)
 
 	const timePerUnit = convertTimeFormatForDisplay(timer.remainTime)
 
@@ -91,21 +86,6 @@ const TimerCountdown = ({ alarmPlayer }) => {
 			? delay
 			: null
 	)
-
-	useEffect(() => {
-		if (activeTimerId) {
-			// play the music again once timer is changed
-			musicPlayer.current.seek(0)
-			dispatch(timerStatusUpdated({ status: TimerStatus.RUNNING }))
-		}
-	}, [activeTimerId, dispatch])
-
-	useEffect(() => {
-		// reset timers if status changed to STOPPED
-		if (timerStatus === TimerStatus.STOPPED) {
-			musicPlayer.current.seek(0)
-		}
-	}, [timerStatus, dispatch])
 
 	return (
 		<Box textAlign="center" height="100%" display="flex" flexDirection="column">
@@ -153,14 +133,6 @@ const TimerCountdown = ({ alarmPlayer }) => {
 					)}
 				</Box>
 			</Box>
-			<ReactHowler
-				src={muayThaiBgMusic}
-				playing={timerStatus === TimerStatus.RUNNING && timer.music !== ""}
-				mute={isMuted}
-				ref={musicPlayer}
-				loop={true}
-				html5={true}
-			/>
 		</Box>
 	)
 }
