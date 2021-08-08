@@ -124,6 +124,7 @@ const ControlPanel = ({ setHeightOfControlPanel, handleModalStatus }) => {
 							variant="contained"
 							color="primary"
 							size="large"
+							disabled={showCountdown && timerStatus === TimerStatus.STOPPED}
 						>
 							{timerStatus === TimerStatus.RUNNING ? "Pause" : "Start"}
 						</Button>
