@@ -20,19 +20,6 @@ const useStyles = makeStyles({
 	},
 })
 
-function debounce(fn, ms) {
-	let timer = null
-
-	return () => {
-		clearTimeout(timer)
-
-		timer = setTimeout(() => {
-			timer = null
-			fn.apply(this, arguments)
-		}, ms)
-	}
-}
-
 const TimerApp = () => {
 	const classes = useStyles()
 	const [heightOfControlPanel, setHeightOfControlPanel] = useState(0)
@@ -56,11 +43,11 @@ const TimerApp = () => {
 	}, [heightOfControlPanel])
 
 	useEffect(() => {
-		const debouncedSetHeight = debounce(setHeight, 1000)
-		window.addEventListener("resize", debouncedSetHeight)
+		setHeight()
+		window.addEventListener("resize", setHeight)
 
 		return () => {
-			window.removeEventListener("resize", debouncedSetHeight)
+			window.removeEventListener("resize", setHeight)
 		}
 	})
 
