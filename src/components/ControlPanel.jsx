@@ -105,7 +105,7 @@ const ControlPanel = ({ setHeightOfControlPanel, handleModalStatus }) => {
 	})
 
 	return (
-		<Paper elevation={3} id="control-panel">
+		<Paper elevation={10} id="control-panel">
 			<Container maxWidth="md" className={classes.controlPanelContainer}>
 				<IconButton
 					size="medium"

@@ -30,6 +30,8 @@ const useStyles = makeStyles((theme) => ({
 		[theme.breakpoints.up("sm")]: {
 			padding: "20px 40px",
 		},
+		marginTop: theme.spacing(2),
+		marginBottom: theme.spacing(2),
 	},
 	timerToolbar: {
 		justifyContent: "center",
@@ -78,88 +80,81 @@ const Timer = ({ id }) => {
 	const handleDeleteTimer = () => dispatch(timerDeleted(timer.id))
 
 	return (
-		<Box my={2}>
-			<Paper
-				elevation={1}
-				variant="outlined"
-				className={classes.timerContainer}
-				style={{ position: "relative" }}
+		<Paper
+			variant="outlined"
+			className={classes.timerContainer}
+			style={{ position: "relative" }}
+		>
+			<IconButton
+				onClick={handleDeleteTimer}
+				className={classes.deleteButton}
+				size="small"
 			>
-				<IconButton
-					onClick={handleDeleteTimer}
-					className={classes.deleteButton}
-					size="small"
-				>
-					<HighlightOffIcon fontSize="small" />
-				</IconButton>
+				<HighlightOffIcon fontSize="small" />
+			</IconButton>
 
-				<Box m={1} display="flex" justifyContent="center">
+			<Box m={1} display="flex" justifyContent="center">
+				<TextField
+					value={timer.label ?? ""}
+					onChange={(e) => handleLabelChange(e)}
+					inputProps={{ style: { textAlign: "center" } }}
+				/>
+			</Box>
+
+			<Box display="flex" alignItems="center" justifyContent="center">
+				<Box m={1}>
 					<TextField
-						value={timer.label ?? ""}
-						onChange={(e) => handleLabelChange(e)}
-						inputProps={{ style: { textAlign: "center" } }}
+						id={`timer-${id}-min`}
+						label="Minute"
+						type="number"
+						InputLabelProps={{
+							shrink: true,
+						}}
+						inputProps={{ min: 0, max: 59, className: classes.timerInput }}
+						variant="outlined"
+						onChange={(e) => handleTimeChange({ event: e, timeUnit: "minute" })}
+						value={timer.minute}
 					/>
 				</Box>
 
-				<Box display="flex" alignItems="center" justifyContent="center">
-					<Box m={1}>
-						<TextField
-							id={`timer-${id}-min`}
-							label="Minute"
-							type="number"
-							InputLabelProps={{
-								shrink: true,
-							}}
-							inputProps={{ min: 0, max: 59, className: classes.timerInput }}
-							variant="outlined"
-							onChange={(e) =>
-								handleTimeChange({ event: e, timeUnit: "minute" })
-							}
-							value={timer.minute}
-						/>
-					</Box>
+				<Box m={1}>:</Box>
 
-					<Box m={1}>:</Box>
-
-					<Box m={1}>
-						<TextField
-							id={`timer-${id}-sec`}
-							label="Second"
-							type="number"
-							InputLabelProps={{
-								shrink: true,
-							}}
-							variant="outlined"
-							inputProps={{ min: 0, max: 59, className: classes.timerInput }}
-							onChange={(e) =>
-								handleTimeChange({ event: e, timeUnit: "second" })
-							}
-							value={timer.second}
-						/>
-					</Box>
+				<Box m={1}>
+					<TextField
+						id={`timer-${id}-sec`}
+						label="Second"
+						type="number"
+						InputLabelProps={{
+							shrink: true,
+						}}
+						variant="outlined"
+						inputProps={{ min: 0, max: 59, className: classes.timerInput }}
+						onChange={(e) => handleTimeChange({ event: e, timeUnit: "second" })}
+						value={timer.second}
+					/>
 				</Box>
+			</Box>
 
-				<Box display="flex" className={classes.timerToolbar}>
-					<FormControl>
-						<InputLabel id={`timer-music-${timer.id}-label`}>
-							Timer Music
-						</InputLabel>
-						<Select
-							labelId={`timer-music-${timer.id}-label`}
-							id={`timer-music-${timer.id}`}
-							value={timer.music ?? ""}
-							onChange={handleMusicChange}
-							className={classes.musicInput}
-						>
-							<MenuItem value="">No Music</MenuItem>
-							<MenuItem value="Muay_Thai_Sarama_ROUND_1.mp3">
-								Muay Thai Music
-							</MenuItem>
-						</Select>
-					</FormControl>
-				</Box>
-			</Paper>
-		</Box>
+			<Box display="flex" className={classes.timerToolbar}>
+				<FormControl>
+					<InputLabel id={`timer-music-${timer.id}-label`}>
+						Timer Music
+					</InputLabel>
+					<Select
+						labelId={`timer-music-${timer.id}-label`}
+						id={`timer-music-${timer.id}`}
+						value={timer.music ?? ""}
+						onChange={handleMusicChange}
+						className={classes.musicInput}
+					>
+						<MenuItem value="">No Music</MenuItem>
+						<MenuItem value="Muay_Thai_Sarama_ROUND_1.mp3">
+							Muay Thai Music
+						</MenuItem>
+					</Select>
+				</FormControl>
+			</Box>
+		</Paper>
 	)
 }
 

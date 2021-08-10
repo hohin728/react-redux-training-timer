@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react"
 import TimerMain from "../features/timers/TimerMain"
 import ControlPanel from "./ControlPanel"
 import Settings from "./Settings"
-import { Box, makeStyles } from "@material-ui/core"
+import { Box, Paper, makeStyles } from "@material-ui/core"
 import MusicPlayer from "./MusicPlayer"
 
 const useStyles = makeStyles({
 	app: {
 		overflow: "hidden",
+		height: "100%",
+		borderRadius: 0,
 	},
 	appBar: {
 		position: "fixed",
@@ -52,7 +54,7 @@ const TimerApp = () => {
 	})
 
 	return (
-		<Box className={`App ${classes.app}`}>
+		<Paper elevation={0} className={`App ${classes.app}`}>
 			<Box className={classes.mainSection}>
 				<TimerMain heightOfMainSection={heightOfMainSection} />
 			</Box>
@@ -67,7 +69,7 @@ const TimerApp = () => {
 			<MusicPlayer />
 
 			<Settings open={modalIsOpen} handleOpen={handleModalStatus} />
-		</Box>
+		</Paper>
 	)
 }
 
