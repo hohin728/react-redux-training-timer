@@ -12,6 +12,16 @@ const App = () => {
 	const systemPrefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)")
 	const userEnabledDarkMode = useSelector(selectIsDarkMode)
 
+	const getMode = (userPrefersDarkMode, systemPrefersDarkMode) => {
+		let preferDarkMode = null
+		if (userPrefersDarkMode === null) {
+			preferDarkMode = systemPrefersDarkMode
+		} else {
+			preferDarkMode = userPrefersDarkMode
+		}
+		return preferDarkMode ? "dark" : "light"
+	}
+
 	const theme = React.useMemo(
 		() =>
 			createMuiTheme({
@@ -19,7 +29,7 @@ const App = () => {
 					primary: {
 						main: blue[500],
 					},
-					type: userEnabledDarkMode ?? systemPrefersDarkMode ? "dark" : "light",
+					type: getMode(userEnabledDarkMode, systemPrefersDarkMode),
 				},
 			}),
 		[userEnabledDarkMode, systemPrefersDarkMode]
