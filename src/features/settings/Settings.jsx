@@ -1,10 +1,7 @@
 import React from "react"
 import { useSelector, useDispatch } from "react-redux"
-
-import {
-	selectTimerDelay,
-	timerDelayUpdated,
-} from "../features/timers/timersSlice"
+import { selectTimerDelay, timerDelayUpdated } from "../timers/timersSlice"
+import { toggleDarkMode, selectIsDarkMode } from "../settings/settingsSlice"
 
 import {
 	Box,
@@ -12,8 +9,11 @@ import {
 	DialogTitle,
 	DialogContent,
 	FormControl,
+	FormControlLabel,
+	Grid,
 	InputLabel,
 	Select,
+	Switch,
 	MenuItem,
 	makeStyles,
 	Typography,
@@ -31,6 +31,12 @@ const Settings = ({ open, handleOpen }) => {
 	const classes = useStyles()
 
 	const delay = useSelector(selectTimerDelay)
+	const isDarkMode = useSelector(selectIsDarkMode)
+
+	const handleDarkModeToggle = () => {
+		dispatch(toggleDarkMode())
+		localStorage.setItem("darkMode", !isDarkMode)
+	}
 
 	const handleDelayChange = (e) =>
 		dispatch(timerDelayUpdated({ delay: e.target.value }))
@@ -52,18 +58,34 @@ const Settings = ({ open, handleOpen }) => {
 				</Box>
 			</DialogTitle>
 			<DialogContent style={{ paddingBottom: 16 }}>
-				<FormControl className={classes.formControl}>
-					<InputLabel>Refresh rate</InputLabel>
-					<Select
-						id="updateFreq"
-						value={delay}
-						onChange={(e) => handleDelayChange(e)}
-					>
-						<MenuItem value={10}>10</MenuItem>
-						<MenuItem value={100}>100</MenuItem>
-						<MenuItem value={1000}>1000</MenuItem>
-					</Select>
-				</FormControl>
+				<Grid container>
+					<Grid item xs={6}>
+						<FormControl className={classes.formControl}>
+							<InputLabel>Refresh rate</InputLabel>
+							<Select
+								id="updateFreq"
+								value={delay}
+								onChange={(e) => handleDelayChange(e)}
+							>
+								<MenuItem value={10}>10</MenuItem>
+								<MenuItem value={100}>100</MenuItem>
+								<MenuItem value={1000}>1000</MenuItem>
+							</Select>
+						</FormControl>
+					</Grid>
+
+					<Grid item xs={6}>
+						<FormControlLabel
+							control={
+								<Switch
+									checked={isDarkMode ?? false}
+									onChange={handleDarkModeToggle}
+								/>
+							}
+							label="Dark Theme"
+						/>
+					</Grid>
+				</Grid>
 			</DialogContent>
 		</Dialog>
 	)

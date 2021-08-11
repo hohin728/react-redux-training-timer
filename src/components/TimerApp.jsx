@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import TimerMain from "../features/timers/TimerMain"
 import ControlPanel from "./ControlPanel"
-import Settings from "./Settings"
+import Settings from "../features/settings/Settings"
 import { Box, Paper, makeStyles } from "@material-ui/core"
 import MusicPlayer from "./MusicPlayer"
 
