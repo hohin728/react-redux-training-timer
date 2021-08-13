@@ -1,7 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit"
 
+const initDarkMode = () => {
+	const savedPreference = localStorage.getItem("darkMode")
+
+	if (savedPreference !== null) {
+		return savedPreference === "true"
+	}
+
+	const systemPreference =
+		window.matchMedia &&
+		window.matchMedia("(prefers-color-scheme: dark)").matches
+
+	return systemPreference
+}
+
 const initialState = {
-	darkMode: localStorage.getItem("darkMode"),
+	darkMode: initDarkMode(),
 }
 
 const settingsSlice = createSlice({
