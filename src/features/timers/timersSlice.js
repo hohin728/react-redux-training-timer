@@ -147,9 +147,11 @@ const timersSlice = createSlice({
 				state.loop.current = current
 			}
 
-			state.loop.total = Number.isInteger(parseInt(total))
-				? parseInt(total)
-				: ""
+			if (total) {
+				state.loop.total = Number.isInteger(parseInt(total))
+					? parseInt(total)
+					: ""
+			}
 		},
 		timerToggledMute(state, action) {
 			const { muteType } = action.payload
