@@ -173,7 +173,9 @@ const timersSlice = createSlice({
 		timerSetTotalLoop(state, action) {
 			const total = action.payload
 
-			if (total) {
+			if (total || total === "") {
+				console.log(Number.isInteger(parseInt(total)))
+
 				state.loop.total = Number.isInteger(parseInt(total))
 					? parseInt(total)
 					: ""

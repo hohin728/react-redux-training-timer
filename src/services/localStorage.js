@@ -10,6 +10,9 @@ export const loadState = () => {
 		}
 
 		const savedState = JSON.parse(savedStateJson)
+		const savedTotalLoop =
+			savedState.totalLoop !== "" ? savedState.totalLoop : 1
+
 		const savedTimers = savedState.entities
 
 		// calculate remain time
@@ -23,7 +26,7 @@ export const loadState = () => {
 		return {
 			ids: savedState.ids,
 			entities: savedTimers,
-			totalLoop: savedState.totalLoop,
+			totalLoop: savedTotalLoop,
 		}
 	} catch (err) {
 		return undefined
@@ -32,7 +35,7 @@ export const loadState = () => {
 
 export const saveState = ({ timers: timerState }) => {
 	try {
-		const totalLoop = timerState.loop.total
+		const totalLoop = timerState.loop.total ?? 1
 		const ids = timerState.ids
 		const newEntities = cloneDeep(timerState.entities)
 
