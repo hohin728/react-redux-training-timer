@@ -54,9 +54,9 @@ const TimerCountdown = ({ alarmPlayer }) => {
 
 	useInterval(
 		() => {
-			if (timer.remainTime > 0) {
-				dispatch(timerDeductTime({ timerId: timer.id, delay }))
-			} else {
+			dispatch(timerDeductTime({ timerId: timer.id, delay }))
+
+			if (timer.remainTime - delay <= 0) {
 				alarmPlayer.current.play()
 
 				/**
