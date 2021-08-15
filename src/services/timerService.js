@@ -1,4 +1,5 @@
-import { isInteger, uniqueId } from "lodash"
+import { isInteger } from "lodash"
+import { v4 as uuidv4 } from "uuid"
 
 const defaultTimerMinute = 0
 const defaultTimerSecond = 3
@@ -13,10 +14,10 @@ export const calcTimerRemainTime = (params) => {
 }
 
 export const createTimer = (params) => {
-	const id = params && params.timerId ? params.timerId : uniqueId()
+	const id = params && params.timerId ? params.timerId : uuidv4()
 	const timer = {
 		id: id,
-		label: params && params.label ? params.label : "timer label " + id,
+		label: params && params.label ? params.label : "timer label",
 		minute: params && params.minute ? params.minute : defaultTimerMinute,
 		second: params && params.second ? params.second : defaultTimerSecond,
 		remainTime: 0,
