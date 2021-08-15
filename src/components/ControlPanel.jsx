@@ -8,7 +8,7 @@ import {
 	timerResetTimers,
 	timerSetShowCountdown,
 	selectTimerLoopTotalCount,
-	timerSetLoop,
+	timerSetTotalLoop,
 	timerToggledMute,
 	selectTimerIsMuted,
 	timerAdded,
@@ -92,8 +92,7 @@ const ControlPanel = ({ setHeightOfControlPanel, handleModalStatus }) => {
 	const handleToggleMusicMuted = () =>
 		dispatch(timerToggledMute({ muteType: "music" }))
 
-	const handleLoopChanged = (e) =>
-		dispatch(timerSetLoop({ total: e.target.value }))
+	const handleLoopChanged = (e) => dispatch(timerSetTotalLoop(e.target.value))
 
 	const handleAddTimer = () => dispatch(timerAdded(createTimer()))
 

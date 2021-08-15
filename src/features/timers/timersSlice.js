@@ -9,24 +9,48 @@ import {
 } from "../../services/timerService"
 import TimerStatus from "./TimerStatus"
 import { isInteger } from "lodash"
+import { loadState } from "../../services/localStorage"
 
 const timersAdapter = createEntityAdapter()
 
-const initialState = timersAdapter.getInitialState({
-	showCountdown: false,
-	delay: 1000,
-	activeTimerId: null,
-	activeTimerMusic: "",
-	status: TimerStatus.STOPPED,
-	loop: {
-		current: 1,
-		total: 1,
-	},
-	mute: {
-		alarm: false,
-		music: false,
-	},
-})
+const getInitialState = () => {
+	const loadedState = loadState()
+
+	let state = {
+		showCountdown: false,
+		delay: 1000,
+		activeTimerId: null,
+		activeTimerMusic: "",
+		status: TimerStatus.STOPPED,
+		loop: {
+			current: 1,
+			total: 1,
+		},
+		mute: {
+			alarm: false,
+			music: false,
+		},
+	}
+
+	if (
+		loadedState &&
+		loadedState.entities &&
+		loadedState.ids &&
+		loadedState.totalLoop
+	) {
+		state = {
+			...state,
+			entities: loadedState.entities,
+			ids: loadedState.ids,
+			loop: {
+				...state.loop,
+				total: loadedState.totalLoop,
+			},
+		}
+	}
+
+	return timersAdapter.getInitialState(state)
+}
 
 /**
  * {
@@ -41,7 +65,7 @@ const initialState = timersAdapter.getInitialState({
 
 const timersSlice = createSlice({
 	name: "timers",
-	initialState,
+	initialState: getInitialState(),
 	reducers: {
 		timersInitialized: timersAdapter.addMany,
 		timerAdded: timersAdapter.addOne,
@@ -139,13 +163,15 @@ const timersSlice = createSlice({
 			const { showCountdown } = action.payload
 			state.showCountdown = showCountdown
 		},
-		timerSetLoop(state, action) {
-			const current = action && action.payload ? action.payload.current : null
-			const total = action && action.payload ? action.payload.total : null
+		timerSetCurrentLoop(state, action) {
+			const current = action.payload
 
 			if (current && isInteger(current)) {
 				state.loop.current = current
 			}
+		},
+		timerSetTotalLoop(state, action) {
+			const total = action.payload
 
 			if (total) {
 				state.loop.total = Number.isInteger(parseInt(total))
@@ -182,7 +208,8 @@ export const {
 	timerResetTimers,
 	timerResetRemainTime,
 	timerSetShowCountdown,
-	timerSetLoop,
+	timerSetCurrentLoop,
+	timerSetTotalLoop,
 	timerToggledMute,
 } = timersSlice.actions
 

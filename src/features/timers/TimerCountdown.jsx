@@ -11,7 +11,7 @@ import {
 	timerStatusUpdated,
 	selectTimerLoopCurrentCount,
 	selectTimerLoopTotalCount,
-	timerSetLoop,
+	timerSetCurrentLoop,
 	timerResetRemainTime,
 } from "./timersSlice"
 import useInterval from "../../hooks/useInterval"
@@ -68,7 +68,7 @@ const TimerCountdown = ({ alarmPlayer }) => {
 				if (activeTimerId === lastTimerId) {
 					// if loop count has reached the end
 					if (loopCurrent < loopTotal) {
-						dispatch(timerSetLoop({ current: loopCurrent + 1 }))
+						dispatch(timerSetCurrentLoop({ current: loopCurrent + 1 }))
 						// reset remain time of every timer
 						dispatch(timerResetRemainTime())
 						dispatch(timerSetNextTimer())
