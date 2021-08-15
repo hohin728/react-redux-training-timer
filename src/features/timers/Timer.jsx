@@ -1,5 +1,6 @@
 import React from "react"
 import { useSelector, useDispatch } from "react-redux"
+import { isValidTimeInput } from "../../services/timerService"
 import {
 	selectTimerById,
 	timerSetTime,
@@ -68,7 +69,7 @@ const Timer = ({ id }) => {
 			timeUnit,
 		} = params
 
-		dispatch(timerSetTime(timer.id, parseInt(value), timeUnit))
+		dispatch(timerSetTime(timer.id, value, timeUnit))
 	}
 
 	const handleLabelChange = (e) =>
@@ -110,10 +111,21 @@ const Timer = ({ id }) => {
 						InputLabelProps={{
 							shrink: true,
 						}}
-						inputProps={{ min: 0, max: 59, className: classes.timerInput }}
+						inputProps={{
+							min: 0,
+							max: 59,
+							inputMode: "numeric",
+							className: classes.timerInput,
+						}}
 						variant="outlined"
 						onChange={(e) => handleTimeChange({ event: e, timeUnit: "minute" })}
 						value={timer.minute}
+						error={
+							!isValidTimeInput({
+								value: timer.minute,
+								timeUnit: "minute",
+							})
+						}
 					/>
 				</Box>
 
@@ -128,9 +140,20 @@ const Timer = ({ id }) => {
 							shrink: true,
 						}}
 						variant="outlined"
-						inputProps={{ min: 0, max: 59, className: classes.timerInput }}
+						inputProps={{
+							min: 0,
+							max: 59,
+							inputMode: "numeric",
+							className: classes.timerInput,
+						}}
 						onChange={(e) => handleTimeChange({ event: e, timeUnit: "second" })}
 						value={timer.second}
+						error={
+							!isValidTimeInput({
+								value: timer.second,
+								timeUnit: "second",
+							})
+						}
 					/>
 				</Box>
 			</Box>

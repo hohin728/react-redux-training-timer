@@ -92,9 +92,8 @@ const ControlPanel = ({ setHeightOfControlPanel, handleModalStatus }) => {
 	const handleToggleMusicMuted = () =>
 		dispatch(timerToggledMute({ muteType: "music" }))
 
-	const handleLoopChanged = (e) => {
-		dispatch(timerSetLoop({ total: parseInt(e.target.value) }))
-	}
+	const handleLoopChanged = (e) =>
+		dispatch(timerSetLoop({ total: e.target.value }))
 
 	const handleAddTimer = () => dispatch(timerAdded(createTimer()))
 
@@ -161,10 +160,18 @@ const ControlPanel = ({ setHeightOfControlPanel, handleModalStatus }) => {
 							id="loop"
 							label="No. of rounds"
 							type="number"
+							InputLabelProps={{
+								shrink: true,
+							}}
+							variant="outlined"
 							value={loopTotal}
-							onChange={(e) => handleLoopChanged(e)}
+							inputProps={{ inputMode: "numeric" }}
+							onChange={handleLoopChanged}
 							disabled={showCountdown}
 							size="small"
+							error={
+								Number.isNaN(parseInt(loopTotal)) || parseInt(loopTotal) < 1
+							}
 						/>
 					</FormControl>
 				</Box>

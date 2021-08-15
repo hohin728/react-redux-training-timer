@@ -3,7 +3,10 @@ import {
 	createSelector,
 	createSlice,
 } from "@reduxjs/toolkit"
-import { calcTimerRemainTime } from "../../services/timerService"
+import {
+	calcTimerRemainTime,
+	isValidTimeInput,
+} from "../../services/timerService"
 import TimerStatus from "./TimerStatus"
 import { isInteger } from "lodash"
 
@@ -55,8 +58,13 @@ const timersSlice = createSlice({
 				const timer = state.entities[timerId]
 
 				if (timeUnit === "minute" || timeUnit === "second") {
-					timer[timeUnit] = value
-					timer.remainTime = (timer.minute * 60 + timer.second) * 1000
+					timer[timeUnit] = Number.isInteger(parseInt(value))
+						? parseInt(value)
+						: ""
+
+					timer.remainTime = isValidTimeInput({ value, timeUnit })
+						? (timer.minute * 60 + timer.second) * 1000
+						: 0
 				}
 			},
 			prepare(timerId, value, timeUnit) {
@@ -132,14 +140,16 @@ const timersSlice = createSlice({
 			state.showCountdown = showCountdown
 		},
 		timerSetLoop(state, action) {
-			const { current, total } = action.payload
+			const current = action && action.payload ? action.payload.current : null
+			const total = action && action.payload ? action.payload.total : null
 
 			if (current && isInteger(current)) {
 				state.loop.current = current
 			}
-			if (total && isInteger(total)) {
-				state.loop.total = total
-			}
+
+			state.loop.total = Number.isInteger(parseInt(total))
+				? parseInt(total)
+				: ""
 		},
 		timerToggledMute(state, action) {
 			const { muteType } = action.payload

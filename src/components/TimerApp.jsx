@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useCallback } from "react"
 import TimerMain from "../features/timers/TimerMain"
 import ControlPanel from "./ControlPanel"
 import Settings from "../features/settings/Settings"
@@ -40,9 +40,7 @@ const TimerApp = () => {
 		}
 	}
 
-	useEffect(() => {
-		setHeight()
-	}, [heightOfControlPanel])
+	useCallback(setHeight, [heightOfControlPanel])
 
 	useEffect(() => {
 		setHeight()

@@ -59,3 +59,23 @@ export const convertTimeFormatForDisplay = (convertMillisec) => {
 		minute,
 	}
 }
+
+export const getInvalidTimeInputMessage = ({ value, timeUnit }) => {
+	if (timeUnit !== "minute" && timeUnit !== "second") {
+		// console.log("Time unit must be either 'minute' or 'second'")
+		return "Time unit must be either 'minute' or 'second'"
+	}
+	if (!Number.isInteger(parseInt(value))) {
+		// console.log("Time value must be an integer")
+		return "Time value must be an integer"
+	}
+	if (parseInt(value) < 0 || parseInt(value) > 59) {
+		// console.log("Time value must be between 0 and 59")
+		return "Time value must be between 0 and 59"
+	}
+	return ""
+}
+
+export const isValidTimeInput = ({ value, timeUnit }) => {
+	return getInvalidTimeInputMessage({ value, timeUnit }) === ""
+}
