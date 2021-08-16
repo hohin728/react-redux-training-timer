@@ -1,30 +1,64 @@
 import { createSlice } from "@reduxjs/toolkit"
+import {
+	defaultMinuteIfNotSaved,
+	defaultSecondIfNotSaved,
+} from "../../services/timerService"
+import { loadSettingsState } from "../../services/localStorage"
 
-const initDarkMode = () => {
-	const savedPreference = localStorage.getItem("darkMode")
+const getInitialState = () => {
+	const loadedState = loadSettingsState()
 
-	if (savedPreference !== null) {
-		return savedPreference === "true"
-	}
-
-	const systemPreference =
+	const systemPrefersDark =
 		window.matchMedia &&
 		window.matchMedia("(prefers-color-scheme: dark)").matches
 
-	return systemPreference
-}
+	const isDarkMode =
+		loadedState && loadedState.darkMode !== null
+			? loadedState.darkMode === true
+			: systemPrefersDark
 
-const initialState = {
-	darkMode: initDarkMode(),
-	defaultTime: {
-		minute: 1,
-		second: 30,
-	},
+	let state = {
+		darkMode: isDarkMode,
+		defaultTime: {
+			minute: defaultMinuteIfNotSaved,
+			second: defaultSecondIfNotSaved,
+		},
+	}
+
+	if (loadedState && loadedState.darkMode !== null) {
+		// darkMode
+		state = { ...state, darkMode: loadedState.darkMode }
+	}
+
+	if (loadedState && loadedState.defaultTime) {
+		// default minute
+		if (loadedState.defaultTime.minute !== null) {
+			state = {
+				...state,
+				defaultTime: {
+					...state.defaultTime,
+					minute: loadedState.defaultTime.minute,
+				},
+			}
+		}
+		if (loadedState.defaultTime.second !== null) {
+			// default second
+			state = {
+				...state,
+				defaultTime: {
+					...state.defaultTime,
+					second: loadedState.defaultTime.second,
+				},
+			}
+		}
+	}
+
+	return state
 }
 
 const settingsSlice = createSlice({
 	name: "settings",
-	initialState,
+	initialState: getInitialState(),
 	reducers: {
 		toggleDarkMode(state) {
 			state.darkMode = !state.darkMode

@@ -1,8 +1,9 @@
 import { isInteger } from "lodash"
 import { v4 as uuidv4 } from "uuid"
 
-const defaultTimerMinute = 0
-const defaultTimerSecond = 3
+// default time when user's preference is not found
+export const defaultMinuteIfNotSaved = 1
+export const defaultSecondIfNotSaved = 30
 
 export const calcTimerRemainTime = (params) => {
 	const { minute, second } = params
@@ -18,8 +19,14 @@ export const createTimer = (params) => {
 	const timer = {
 		id: id,
 		label: params && params.label ? params.label : "timer label",
-		minute: params && params.minute ? params.minute : defaultTimerMinute,
-		second: params && params.second ? params.second : defaultTimerSecond,
+		minute:
+			params && params.minute !== null
+				? params.minute
+				: defaultMinuteIfNotSaved,
+		second:
+			params && params.second !== null
+				? params.second
+				: defaultSecondIfNotSaved,
 		remainTime: 0,
 		music:
 			params && params.music ? params.music : "Muay_Thai_Sarama_ROUND_1.mp3",
@@ -30,15 +37,6 @@ export const createTimer = (params) => {
 	})
 
 	return timer
-}
-
-export const initTimers = () => {
-	const timers = []
-	for (let i = 0; i < 3; i++) {
-		const timer = createTimer()
-		timers.push(timer)
-	}
-	return timers
 }
 
 export const convertTimeFormatForDisplay = (convertMillisec) => {

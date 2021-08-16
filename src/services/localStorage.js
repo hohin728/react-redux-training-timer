@@ -43,8 +43,6 @@ export const loadSettingsState = () => {
 
 		const savedState = JSON.parse(savedStateJson)
 
-		console.log(savedState)
-
 		return savedState
 	} catch (err) {
 		return undefined

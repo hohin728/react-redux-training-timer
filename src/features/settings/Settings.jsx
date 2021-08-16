@@ -41,10 +41,7 @@ const Settings = ({ open, handleOpen }) => {
 	const defaultMinute = useSelector(selectDefaultMinute)
 	const defaultSecond = useSelector(selectDefaultSecond)
 
-	const handleDarkModeToggle = () => {
-		dispatch(toggleDarkMode())
-		localStorage.setItem("darkMode", !isDarkMode)
-	}
+	const handleDarkModeToggle = () => dispatch(toggleDarkMode())
 
 	const handleDelayChange = (e) =>
 		dispatch(timerDelayUpdated({ delay: e.target.value }))
