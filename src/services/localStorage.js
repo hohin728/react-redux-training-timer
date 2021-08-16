@@ -1,7 +1,7 @@
 import { calcTimerRemainTime } from "./timerService"
 import { cloneDeep } from "lodash"
 
-export const loadState = () => {
+export const loadTimersState = () => {
 	try {
 		const savedStateJson = localStorage.getItem("timers")
 
@@ -33,11 +33,29 @@ export const loadState = () => {
 	}
 }
 
-export const saveState = ({ timers: timerState }) => {
+export const loadSettingsState = () => {
 	try {
-		const totalLoop = timerState.loop.total ?? 1
-		const ids = timerState.ids
-		const newEntities = cloneDeep(timerState.entities)
+		const savedStateJson = localStorage.getItem("settings")
+
+		if (savedStateJson === null) {
+			return undefined
+		}
+
+		const savedState = JSON.parse(savedStateJson)
+
+		console.log(savedState)
+
+		return savedState
+	} catch (err) {
+		return undefined
+	}
+}
+
+export const saveState = ({ timers: timersState, settings: settingsState }) => {
+	try {
+		const totalLoop = timersState.loop.total ?? 1
+		const ids = timersState.ids
+		const newEntities = cloneDeep(timersState.entities)
 
 		Object.values(newEntities).forEach((entity) => {
 			if (entity.remainTime) {
@@ -52,6 +70,8 @@ export const saveState = ({ timers: timerState }) => {
 		}
 
 		localStorage.setItem("timers", JSON.stringify(saveState))
+
+		localStorage.setItem("settings", JSON.stringify(settingsState))
 	} catch {
 		// ignore write errors
 	}

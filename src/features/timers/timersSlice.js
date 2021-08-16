@@ -10,12 +10,12 @@ import {
 } from "../../services/timerService"
 import TimerStatus from "./TimerStatus"
 import { isInteger } from "lodash"
-import { loadState } from "../../services/localStorage"
+import { loadTimersState } from "../../services/localStorage"
 
 const timersAdapter = createEntityAdapter()
 
 const getInitialState = () => {
-	const loadedState = loadState()
+	const loadedState = loadTimersState()
 
 	let state = {
 		showCountdown: false,

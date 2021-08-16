@@ -16,6 +16,7 @@ store.subscribe(
 	throttle(() => {
 		saveState({
 			timers: store.getState().timers,
+			settings: store.getState().settings,
 		})
 	}, 1000)
 )
