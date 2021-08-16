@@ -16,6 +16,10 @@ const initDarkMode = () => {
 
 const initialState = {
 	darkMode: initDarkMode(),
+	defaultTime: {
+		minute: 1,
+		second: 30,
+	},
 }
 
 const settingsSlice = createSlice({
@@ -25,11 +29,23 @@ const settingsSlice = createSlice({
 		toggleDarkMode(state) {
 			state.darkMode = !state.darkMode
 		},
+		setDefaultTime(state, action) {
+			const { value, timeUnit } = action.payload
+
+			if (timeUnit === "minute" || timeUnit === "second") {
+				state.defaultTime[timeUnit] = Number.isInteger(parseInt(value))
+					? parseInt(value)
+					: ""
+			}
+		},
 	},
 })
 
 export default settingsSlice.reducer
 
-export const { toggleDarkMode } = settingsSlice.actions
+export const { toggleDarkMode, setDefaultTime } = settingsSlice.actions
 
 export const selectIsDarkMode = (state) => state.settings.darkMode
+
+export const selectDefaultMinute = (state) => state.settings.defaultTime.minute
+export const selectDefaultSecond = (state) => state.settings.defaultTime.second

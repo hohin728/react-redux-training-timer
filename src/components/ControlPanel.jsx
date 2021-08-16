@@ -14,6 +14,10 @@ import {
 	timerAdded,
 	selectShowCountdown,
 } from "../features/timers/timersSlice"
+import {
+	selectDefaultMinute,
+	selectDefaultSecond,
+} from "../features/settings/settingsSlice"
 import TimerStatus from "../features/timers/TimerStatus"
 
 import {
@@ -67,6 +71,8 @@ const ControlPanel = ({ setHeightOfControlPanel, handleModalStatus }) => {
 	const loopTotal = useSelector(selectTimerLoopTotalCount)
 	const isMuted = useSelector(selectTimerIsMuted)
 	const showCountdown = useSelector(selectShowCountdown)
+	const defaultMinute = useSelector(selectDefaultMinute)
+	const defaultSecond = useSelector(selectDefaultSecond)
 
 	const handleStart = () => {
 		if (!activeTimerId) {
@@ -94,7 +100,10 @@ const ControlPanel = ({ setHeightOfControlPanel, handleModalStatus }) => {
 
 	const handleLoopChanged = (e) => dispatch(timerSetTotalLoop(e.target.value))
 
-	const handleAddTimer = () => dispatch(timerAdded(createTimer()))
+	const handleAddTimer = () =>
+		dispatch(
+			timerAdded(createTimer({ minute: defaultMinute, second: defaultSecond }))
+		)
 
 	// get the height of control panel to render the height of main section
 	useEffect(() => {

@@ -1,8 +1,14 @@
 import React from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { selectTimerDelay, timerDelayUpdated } from "../timers/timersSlice"
-import { toggleDarkMode, selectIsDarkMode } from "../settings/settingsSlice"
-
+import {
+	toggleDarkMode,
+	setDefaultTime,
+	selectIsDarkMode,
+	selectDefaultMinute,
+	selectDefaultSecond,
+} from "../settings/settingsSlice"
+import TimeInputField from "../../components/TimeInputField"
 import {
 	Box,
 	Dialog,
@@ -32,6 +38,8 @@ const Settings = ({ open, handleOpen }) => {
 
 	const delay = useSelector(selectTimerDelay)
 	const isDarkMode = useSelector(selectIsDarkMode)
+	const defaultMinute = useSelector(selectDefaultMinute)
+	const defaultSecond = useSelector(selectDefaultSecond)
 
 	const handleDarkModeToggle = () => {
 		dispatch(toggleDarkMode())
@@ -40,6 +48,17 @@ const Settings = ({ open, handleOpen }) => {
 
 	const handleDelayChange = (e) =>
 		dispatch(timerDelayUpdated({ delay: e.target.value }))
+
+	const handleTimeChange = (params) => {
+		const {
+			event: {
+				target: { value },
+			},
+			timeUnit,
+		} = params
+
+		dispatch(setDefaultTime({ value, timeUnit }))
+	}
 
 	return (
 		<Dialog
@@ -83,6 +102,25 @@ const Settings = ({ open, handleOpen }) => {
 								/>
 							}
 							label="Dark Theme"
+						/>
+					</Grid>
+
+					<Grid item xs={12}>
+						<TimeInputField
+							id="default-timer-minute"
+							label="Minute"
+							handleChange={handleTimeChange}
+							value={defaultMinute}
+							timeUnit="minute"
+							styles={{ marginTop: 20, marginRight: 20 }}
+						/>
+						<TimeInputField
+							id="default-timer-minute"
+							label="Second"
+							handleChange={handleTimeChange}
+							value={defaultSecond}
+							timeUnit="second"
+							styles={{ marginTop: 20 }}
 						/>
 					</Grid>
 				</Grid>

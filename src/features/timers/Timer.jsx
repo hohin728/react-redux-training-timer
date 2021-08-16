@@ -1,6 +1,5 @@
 import React from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { isValidTimeInput } from "../../services/timerService"
 import TimeInputField from "../../components/TimeInputField"
 import {
 	selectTimerById,
@@ -40,9 +39,6 @@ const useStyles = makeStyles((theme) => ({
 		[theme.breakpoints.up("sm")]: {
 			justifyContent: "flex-start",
 		},
-	},
-	timerInput: {
-		minWidth: 60,
 	},
 	deleteButton: {
 		opacity: 0.2,
@@ -108,7 +104,6 @@ const Timer = ({ id }) => {
 					<TimeInputField
 						id={`timer-${id}-min`}
 						label="Minute"
-						className={classes.timerInput}
 						handleChange={handleTimeChange}
 						value={timer.minute}
 						timeUnit="minute"
@@ -121,7 +116,6 @@ const Timer = ({ id }) => {
 					<TimeInputField
 						id={`timer-${id}-sec`}
 						label="Second"
-						className={classes.timerInput}
 						handleChange={handleTimeChange}
 						value={timer.second}
 						timeUnit="second"
