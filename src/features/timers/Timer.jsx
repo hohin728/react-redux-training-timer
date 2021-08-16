@@ -1,6 +1,7 @@
 import React from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { isValidTimeInput } from "../../services/timerService"
+import TimeInputField from "../../components/TimeInputField"
 import {
 	selectTimerById,
 	timerSetTime,
@@ -104,56 +105,26 @@ const Timer = ({ id }) => {
 
 			<Box display="flex" alignItems="center" justifyContent="center">
 				<Box m={1}>
-					<TextField
+					<TimeInputField
 						id={`timer-${id}-min`}
 						label="Minute"
-						type="number"
-						InputLabelProps={{
-							shrink: true,
-						}}
-						inputProps={{
-							min: 0,
-							max: 59,
-							inputMode: "numeric",
-							className: classes.timerInput,
-						}}
-						variant="outlined"
-						onChange={(e) => handleTimeChange({ event: e, timeUnit: "minute" })}
+						className={classes.timerInput}
+						handleChange={handleTimeChange}
 						value={timer.minute}
-						error={
-							!isValidTimeInput({
-								value: timer.minute,
-								timeUnit: "minute",
-							})
-						}
+						timeUnit="minute"
 					/>
 				</Box>
 
 				<Box m={1}>:</Box>
 
 				<Box m={1}>
-					<TextField
+					<TimeInputField
 						id={`timer-${id}-sec`}
 						label="Second"
-						type="number"
-						InputLabelProps={{
-							shrink: true,
-						}}
-						variant="outlined"
-						inputProps={{
-							min: 0,
-							max: 59,
-							inputMode: "numeric",
-							className: classes.timerInput,
-						}}
-						onChange={(e) => handleTimeChange({ event: e, timeUnit: "second" })}
+						className={classes.timerInput}
+						handleChange={handleTimeChange}
 						value={timer.second}
-						error={
-							!isValidTimeInput({
-								value: timer.second,
-								timeUnit: "second",
-							})
-						}
+						timeUnit="second"
 					/>
 				</Box>
 			</Box>
