@@ -4,6 +4,7 @@ import {
 	createSlice,
 } from "@reduxjs/toolkit"
 import {
+	createTimer,
 	calcTimerRemainTime,
 	isValidTimeInput,
 } from "../../services/timerService"
@@ -30,6 +31,8 @@ const getInitialState = () => {
 			alarm: false,
 			music: false,
 		},
+		ids: [],
+		entities: {},
 	}
 
 	if (
@@ -38,6 +41,7 @@ const getInitialState = () => {
 		loadedState.ids &&
 		loadedState.totalLoop
 	) {
+		// read timers from local storage
 		state = {
 			...state,
 			entities: loadedState.entities,
@@ -45,6 +49,18 @@ const getInitialState = () => {
 			loop: {
 				...state.loop,
 				total: loadedState.totalLoop,
+			},
+		}
+	} else {
+		// create a new timer
+		const newTimer = createTimer()
+
+		state = {
+			...state,
+			ids: [...state.ids, newTimer.id],
+			entities: {
+				...state.entities,
+				[newTimer.id]: newTimer,
 			},
 		}
 	}
