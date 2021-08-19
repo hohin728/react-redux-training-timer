@@ -1,7 +1,14 @@
 import { calcTimerRemainTime } from "./timerService"
 import { cloneDeep, throttle } from "lodash"
+import TimerType, { SavedTimerType } from "../types/Timer"
 
-export const loadTimersState = () => {
+export const loadTimersState = ():
+	| undefined
+	| {
+			ids: string[]
+			entities: object
+			totalLoop: number
+	  } => {
 	try {
 		const savedStateJson = localStorage.getItem("timers")
 
@@ -15,8 +22,9 @@ export const loadTimersState = () => {
 
 		const savedTimers = savedState.entities
 
+		const timers: TimerType[] = Object.values(savedTimers)
 		// calculate remain time
-		Object.values(savedTimers).forEach((timer) => {
+		timers.forEach((timer) => {
 			timer.remainTime = calcTimerRemainTime({
 				minute: timer.minute,
 				second: timer.second,
@@ -33,7 +41,15 @@ export const loadTimersState = () => {
 	}
 }
 
-export const loadSettingsState = () => {
+export const loadSettingsState = ():
+	| undefined
+	| {
+			darkMode: boolean
+			defaultTime: {
+				minute: number
+				second: number
+			}
+	  } => {
 	try {
 		const savedStateJson = localStorage.getItem("settings")
 
@@ -58,7 +74,9 @@ export const saveState = throttle(
 				const ids = timersState.ids
 				const newEntities = cloneDeep(timersState.entities)
 
-				Object.values(newEntities).forEach((entity) => {
+				const newEntitiesItems: SavedTimerType[] = Object.values(newEntities)
+
+				newEntitiesItems.forEach((entity) => {
 					if (entity.remainTime) {
 						delete entity.remainTime
 					}
