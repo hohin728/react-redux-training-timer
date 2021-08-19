@@ -1,10 +1,13 @@
-export type SavedTimerType = {
+export type SavedTimerType = TimerInputType & {
 	id: string
 	label: string
-	minute: number
-	second: number
 	remainTime?: number
 	music: string
+}
+
+export type TimerInputType = {
+	minute: number | ""
+	second: number | ""
 }
 
 type TimerType = SavedTimerType & {

@@ -5,7 +5,11 @@ import {
 } from "../../services/timerService"
 import { loadSettingsState } from "../../services/localStorage"
 
-const getInitialState = () => {
+import { RootState } from "../../store"
+import { PayloadAction } from "@reduxjs/toolkit"
+import SettingsStateType from "../../types/Settings"
+
+const getInitialState = (): SettingsStateType => {
 	const loadedState = loadSettingsState()
 
 	const systemPrefersDark =
@@ -63,14 +67,13 @@ const settingsSlice = createSlice({
 		toggleDarkMode(state) {
 			state.darkMode = !state.darkMode
 		},
-		setDefaultTime(state, action) {
+		setDefaultTime(
+			state,
+			action: PayloadAction<{ value: number; timeUnit: "minute" | "second" }>
+		) {
 			const { value, timeUnit } = action.payload
 
-			if (timeUnit === "minute" || timeUnit === "second") {
-				state.defaultTime[timeUnit] = Number.isInteger(parseInt(value))
-					? parseInt(value)
-					: ""
-			}
+			state.defaultTime[timeUnit] = Number.isInteger(value) ? value : ""
 		},
 	},
 })
@@ -79,7 +82,9 @@ export default settingsSlice.reducer
 
 export const { toggleDarkMode, setDefaultTime } = settingsSlice.actions
 
-export const selectIsDarkMode = (state) => state.settings.darkMode
+export const selectIsDarkMode = (state: RootState) => state.settings.darkMode
 
-export const selectDefaultMinute = (state) => state.settings.defaultTime.minute
-export const selectDefaultSecond = (state) => state.settings.defaultTime.second
+export const selectDefaultMinute = (state: RootState) =>
+	state.settings.defaultTime.minute
+export const selectDefaultSecond = (state: RootState) =>
+	state.settings.defaultTime.second

@@ -1,31 +1,27 @@
 import { isInteger } from "lodash"
 import { v4 as uuidv4 } from "uuid"
-import TimerType from "../types/Timer"
+import TimerType, { TimerInputType, SavedTimerType } from "../types/Timer"
 
 // default time when user's preference is not found
 export const defaultMinuteIfNotSaved = 1
 export const defaultSecondIfNotSaved = 30
 
-export const calcTimerRemainTime = (params: {
-	minute: number
-	second: number
-}): number => {
+export const calcTimerRemainTime = (params: TimerInputType): number => {
 	const { minute, second } = params
 
-	if (isInteger(minute) && isInteger(second)) {
+	if (
+		isInteger(minute) &&
+		isInteger(second) &&
+		minute !== "" &&
+		second !== ""
+	) {
 		return (minute * 60 + second) * 1000
 	}
 	return 0
 }
 
-export const createTimer = (params: {
-	timerId: string
-	label: string
-	minute: number
-	second: number
-	music: string
-}): TimerType => {
-	const id = params && params.timerId ? params.timerId : uuidv4()
+export const createTimer = (params: SavedTimerType): TimerType => {
+	const id = params && params.id ? params.id : uuidv4()
 	const timer = {
 		id: id,
 		label: params && params.label ? params.label : "",
