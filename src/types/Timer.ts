@@ -1,3 +1,24 @@
+import { Dictionary } from "@reduxjs/toolkit"
+import TimerStatus from "../features/timers/TimerStatus"
+
+export type TimersStateType = {
+	ids: string[]
+	entities: Dictionary<TimerType>
+	showCountdown: boolean
+	delay: number
+	activeTimerId: string | null
+	activeTimerMusic: string
+	status: TimerStatus
+	loop: {
+		current: number
+		total: number | ""
+	}
+	mute: {
+		alarm: boolean
+		music: boolean
+	}
+}
+
 export type SavedTimerType = TimerInputType & {
 	id: string
 	label: string
