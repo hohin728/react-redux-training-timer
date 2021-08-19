@@ -18,7 +18,7 @@ export const createTimer = (params) => {
 	const id = params && params.timerId ? params.timerId : uuidv4()
 	const timer = {
 		id: id,
-		label: params && params.label ? params.label : "timer label",
+		label: params && params.label ? params.label : "",
 		minute:
 			params && params.minute !== null
 				? params.minute

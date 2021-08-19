@@ -96,6 +96,7 @@ const Timer = ({ id }) => {
 					value={timer.label ?? ""}
 					onChange={(e) => handleLabelChange(e)}
 					inputProps={{ style: { textAlign: "center" } }}
+					placeholder="timer label"
 				/>
 			</Box>
 
