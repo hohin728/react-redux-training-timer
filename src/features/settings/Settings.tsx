@@ -25,6 +25,7 @@ import {
 	Typography,
 } from "@material-ui/core"
 import SettingsIcon from "@material-ui/icons/Settings"
+import TimerUnit from "../timers/TimerUnits"
 
 const useStyles = makeStyles({
 	formControl: {
@@ -32,7 +33,12 @@ const useStyles = makeStyles({
 	},
 })
 
-const Settings = ({ open, handleOpen }) => {
+type Props = {
+	open: boolean
+	handleOpen: (e: React.ChangeEvent | {}, open: boolean) => void
+}
+
+const Settings = ({ open, handleOpen }: Props) => {
 	const dispatch = useDispatch()
 	const classes = useStyles()
 
@@ -43,10 +49,19 @@ const Settings = ({ open, handleOpen }) => {
 
 	const handleDarkModeToggle = () => dispatch(toggleDarkMode())
 
-	const handleDelayChange = (e) =>
+	const handleDelayChange = (
+		e: React.ChangeEvent<{
+			name?: string | undefined
+			value: unknown
+		}>
+	) => {
 		dispatch(timerDelayUpdated({ delay: e.target.value }))
+	}
 
-	const handleTimeChange = (params) => {
+	const handleTimeChange = (params: {
+		event: React.ChangeEvent<HTMLInputElement>
+		timeUnit: TimerUnit
+	}) => {
 		const {
 			event: {
 				target: { value },
@@ -59,7 +74,7 @@ const Settings = ({ open, handleOpen }) => {
 
 	return (
 		<Dialog
-			onClose={(e) => handleOpen(e, false)}
+			onClose={() => handleOpen({}, false)}
 			aria-labelledby="settings-dialog-title"
 			open={open}
 			maxWidth="sm"
