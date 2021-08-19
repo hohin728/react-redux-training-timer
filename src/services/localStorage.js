@@ -1,5 +1,5 @@
 import { calcTimerRemainTime } from "./timerService"
-import { cloneDeep } from "lodash"
+import { cloneDeep, throttle } from "lodash"
 
 export const loadTimersState = () => {
 	try {
@@ -49,28 +49,36 @@ export const loadSettingsState = () => {
 	}
 }
 
-export const saveState = ({ timers: timersState, settings: settingsState }) => {
-	try {
-		const totalLoop = timersState.loop.total ?? 1
-		const ids = timersState.ids
-		const newEntities = cloneDeep(timersState.entities)
+// Add 2 seconds throttle when saving state to local storage
+export const saveState = throttle(
+	({ timers: timersState, settings: settingsState }) => {
+		try {
+			if (timersState) {
+				const totalLoop = timersState.loop.total ?? 1
+				const ids = timersState.ids
+				const newEntities = cloneDeep(timersState.entities)
 
-		Object.values(newEntities).forEach((entity) => {
-			if (entity.remainTime) {
-				delete entity.remainTime
+				Object.values(newEntities).forEach((entity) => {
+					if (entity.remainTime) {
+						delete entity.remainTime
+					}
+				})
+
+				const saveState = {
+					ids,
+					entities: newEntities,
+					totalLoop,
+				}
+
+				localStorage.setItem("timers", JSON.stringify(saveState))
 			}
-		})
 
-		const saveState = {
-			ids,
-			entities: newEntities,
-			totalLoop,
+			if (settingsState) {
+				localStorage.setItem("settings", JSON.stringify(settingsState))
+			}
+		} catch {
+			// ignore write errors
 		}
-
-		localStorage.setItem("timers", JSON.stringify(saveState))
-
-		localStorage.setItem("settings", JSON.stringify(settingsState))
-	} catch {
-		// ignore write errors
-	}
-}
+	},
+	2000
+)
