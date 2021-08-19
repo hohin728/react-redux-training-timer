@@ -54,7 +54,7 @@ const Settings = ({ open, handleOpen }) => {
 			timeUnit,
 		} = params
 
-		dispatch(setDefaultTime({ value, timeUnit }))
+		dispatch(setDefaultTime({ value: parseInt(value), timeUnit }))
 	}
 
 	return (
