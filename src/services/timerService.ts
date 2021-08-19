@@ -20,7 +20,7 @@ export const calcTimerRemainTime = (params: TimerInputType): number => {
 	return 0
 }
 
-export const createTimer = (params: SavedTimerType): TimerType => {
+export const createTimer = (params?: SavedTimerType): TimerType => {
 	const id = params && params.id ? params.id : uuidv4()
 	const timer = {
 		id: id,
