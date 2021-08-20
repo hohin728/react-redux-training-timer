@@ -1,14 +1,14 @@
 import React from "react"
 import "./styles/App.scss"
 import TimerApp from "./components/TimerApp"
-import { useSelector } from "react-redux"
+import { useAppSelector } from "./hooks/hooks"
 import { selectIsDarkMode } from "./features/settings/settingsSlice"
 import { ThemeProvider } from "@material-ui/core"
 import { unstable_createMuiStrictModeTheme as createMuiTheme } from "@material-ui/core/styles"
 import blue from "@material-ui/core/colors/blue"
 
 const App = () => {
-	const isDarkMode = useSelector(selectIsDarkMode)
+	const isDarkMode = useAppSelector(selectIsDarkMode)
 
 	const theme = React.useMemo(
 		() =>

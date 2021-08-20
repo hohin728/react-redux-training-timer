@@ -32,7 +32,6 @@ export type SavingTimeType = {
 	music?: string
 	minute?: number | ""
 	second?: number | ""
-	remainTime?: number
 }
 
 export type TimerInputType = {
