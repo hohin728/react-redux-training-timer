@@ -19,11 +19,13 @@ const MusicPlayer = () => {
 	const activeTimerId = useSelector(selectActiveTimerId)
 	const music = useSelector(selectActiveTimerMusic)
 
-	const musicPlayer = useRef(null)
+	const musicPlayer = useRef<ReactHowler>(null)
 
 	useEffect(() => {
 		// play the music from the beginning once timer is changed
-		musicPlayer.current.seek(0)
+		if (musicPlayer && musicPlayer.current) {
+			musicPlayer.current.seek(0)
+		}
 
 		if (activeTimerId) {
 			dispatch(timerStatusUpdated({ status: TimerStatus.RUNNING }))
