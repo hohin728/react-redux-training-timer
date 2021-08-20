@@ -55,7 +55,8 @@ const Settings = ({ open, handleOpen }: Props) => {
 			value: unknown
 		}>
 	) => {
-		dispatch(timerDelayUpdated({ delay: e.target.value }))
+		const newDelay = e.target.value as number
+		dispatch(timerDelayUpdated({ delay: newDelay }))
 	}
 
 	const handleTimeChange = (params: {

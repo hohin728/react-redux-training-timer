@@ -11,13 +11,17 @@ import {
 import TimerStatus from "./TimerStatus"
 import { isInteger } from "lodash"
 import { loadTimersState } from "../../services/localStorage"
+import TimerType, { TimersStateType } from "../../types/Timer"
+import { PayloadAction } from "@reduxjs/toolkit"
+import TimerUnit from "./TimerUnits"
+import { RootState } from "../../store"
 
-const timersAdapter = createEntityAdapter()
+const timersAdapter = createEntityAdapter<TimerType>()
 
 const getInitialState = () => {
 	const loadedState = loadTimersState()
 
-	let state = {
+	let state: TimersStateType = {
 		showCountdown: false,
 		delay: 1000,
 		activeTimerId: null,
@@ -68,17 +72,6 @@ const getInitialState = () => {
 	return timersAdapter.getInitialState(state)
 }
 
-/**
- * {
- *  id: string,
- * 	label: string,
- * 	minute: number,
- * 	second: number,
- *  remainTime: number,
- * 	music: string,
- * }
- */
-
 const timersSlice = createSlice({
 	name: "timers",
 	initialState: getInitialState(),
@@ -86,25 +79,37 @@ const timersSlice = createSlice({
 		timersInitialized: timersAdapter.addMany,
 		timerAdded: timersAdapter.addOne,
 		timerDeleted: timersAdapter.removeOne,
-		timerSetLabel(state, action) {
+		timerSetLabel(
+			state,
+			action: PayloadAction<{ timerId: string; label: string }>
+		) {
 			const { timerId, label } = action.payload
 			const timer = state.entities[timerId]
 
-			timer.label = label
+			if (timer) {
+				timer.label = label
+			}
 		},
 		timerSetTime: {
-			reducer(state, action) {
+			reducer(
+				state,
+				action: PayloadAction<{
+					timerId: string
+					value: number | ""
+					timeUnit: TimerUnit
+				}>
+			) {
 				const { timerId, value, timeUnit } = action.payload
 				const timer = state.entities[timerId]
 
-				if (timeUnit === "minute" || timeUnit === "second") {
-					timer[timeUnit] = Number.isInteger(parseInt(value))
-						? parseInt(value)
-						: ""
+				if (timer) {
+					timer[timeUnit] = value
 
-					timer.remainTime = isValidTimeInput({ value, timeUnit })
-						? (timer.minute * 60 + timer.second) * 1000
-						: 0
+					if (timer.minute !== "" && timer.second !== "" && value !== "") {
+						timer.remainTime = isValidTimeInput({ value, timeUnit })
+							? (timer.minute * 60 + timer.second) * 1000
+							: 0
+					}
 				}
 			},
 			prepare(timerId, value, timeUnit) {
@@ -113,34 +118,44 @@ const timersSlice = createSlice({
 				}
 			},
 		},
-		timerSetMusic(state, action) {
+		timerSetMusic(
+			state,
+			action: PayloadAction<{ timerId: string; music: string }>
+		) {
 			const { timerId, music } = action.payload
 			const timer = state.entities[timerId]
 
-			timer.music = music
+			if (timer) {
+				timer.music = music
+			}
 		},
 		timerDeductTime: {
-			reducer(state, action) {
+			reducer(
+				state,
+				action: PayloadAction<{ timerId: string; delay: number }>
+			) {
 				const { timerId, delay } = action.payload
 				const timer = state.entities[timerId]
 
-				timer.remainTime -= delay
+				if (timer) {
+					timer.remainTime -= delay
+				}
 			},
-			prepare({ timerId, delay }) {
+			prepare({ timerId, delay }: { timerId: string; delay: number }) {
 				if (!delay) {
 					delay = 1000
 				}
 				return { payload: { timerId, delay } }
 			},
 		},
-		timerStatusUpdated(state, action) {
+		timerStatusUpdated(state, action: PayloadAction<{ status: TimerStatus }>) {
 			const { status } = action.payload
 			state.status = status
 		},
 		timerSetNextTimer(state) {
 			const timers = Object.values(state.entities)
 			for (const [index, timer] of timers.entries()) {
-				if (timer.remainTime > 0) {
+				if (timer && timer.remainTime > 0) {
 					state.activeTimerId = timer.id
 					state.activeTimerMusic = timer.music
 					break
@@ -151,7 +166,7 @@ const timersSlice = createSlice({
 				}
 			}
 		},
-		timerDelayUpdated(state, action) {
+		timerDelayUpdated(state, action: PayloadAction<{ delay: number }>) {
 			const { delay } = action.payload
 			state.delay = delay
 		},
@@ -160,52 +175,46 @@ const timersSlice = createSlice({
 			state.activeTimerMusic = ""
 			state.status = TimerStatus.STOPPED
 			Object.values(state.entities).forEach((timer) => {
-				timer.remainTime = calcTimerRemainTime({
-					minute: timer.minute,
-					second: timer.second,
-				})
+				if (timer) {
+					timer.remainTime = calcTimerRemainTime({
+						minute: timer.minute,
+						second: timer.second,
+					})
+				}
 			})
 			state.loop.current = 1
 		},
 		timerResetRemainTime(state) {
 			Object.values(state.entities).forEach((timer) => {
-				timer.remainTime = calcTimerRemainTime({
-					minute: timer.minute,
-					second: timer.second,
-				})
+				if (timer) {
+					timer.remainTime = calcTimerRemainTime({
+						minute: timer.minute,
+						second: timer.second,
+					})
+				}
 			})
 		},
-		timerSetShowCountdown(state, action) {
+		timerSetShowCountdown(
+			state,
+			action: PayloadAction<{ showCountdown: boolean }>
+		) {
 			const { showCountdown } = action.payload
 			state.showCountdown = showCountdown
 		},
-		timerSetCurrentLoop(state, action) {
+		timerSetCurrentLoop(state, action: PayloadAction<number>) {
 			const current = action.payload
-
-			if (current && isInteger(current)) {
-				state.loop.current = current
-			}
+			state.loop.current = current
 		},
-		timerSetTotalLoop(state, action) {
+		timerSetTotalLoop(state, action: PayloadAction<number | "">) {
 			const total = action.payload
-
-			if (total || total === "") {
-				console.log(Number.isInteger(parseInt(total)))
-
-				state.loop.total = Number.isInteger(parseInt(total))
-					? parseInt(total)
-					: ""
-			}
+			state.loop.total = total
 		},
-		timerToggledMute(state, action) {
+		timerToggledMute(
+			state,
+			action: PayloadAction<{ muteType: "alarm" | "music" }>
+		) {
 			const { muteType } = action.payload
-
-			if (muteType === "alarm") {
-				state.mute.alarm = !state.mute.alarm
-			}
-			if (muteType === "music") {
-				state.mute.music = !state.mute.music
-			}
+			state.mute[muteType] = !state.mute[muteType]
 		},
 	},
 })
@@ -235,15 +244,17 @@ export const {
 	selectAll: selectTimers,
 	selectById: selectTimerById,
 	selectTotal,
-} = timersAdapter.getSelectors((state) => state.timers)
+} = timersAdapter.getSelectors((state: RootState) => state.timers)
 
-export const selectShowCountdown = (state) => state.timers.showCountdown
+export const selectShowCountdown = (state: RootState) =>
+	state.timers.showCountdown
 
-export const selectTimerDelay = (state) => state.timers.delay
+export const selectTimerDelay = (state: RootState) => state.timers.delay
 
-export const selectActiveTimerId = (state) => state.timers.activeTimerId
+export const selectActiveTimerId = (state: RootState) =>
+	state.timers.activeTimerId
 
-export const selectTimerStatus = (state) => state.timers.status
+export const selectTimerStatus = (state: RootState) => state.timers.status
 
 export const selectLastTimerId = createSelector(
 	selectTimers,
@@ -254,10 +265,13 @@ export const selectLastTimerId = createSelector(
 	}
 )
 
-export const selectTimerLoopCurrentCount = (state) => state.timers.loop.current
+export const selectTimerLoopCurrentCount = (state: RootState) =>
+	state.timers.loop.current
 
-export const selectTimerLoopTotalCount = (state) => state.timers.loop.total
+export const selectTimerLoopTotalCount = (state: RootState) =>
+	state.timers.loop.total
 
-export const selectTimerIsMuted = (state) => state.timers.mute.music
+export const selectTimerIsMuted = (state: RootState) => state.timers.mute.music
 
-export const selectActiveTimerMusic = (state) => state.timers.activeTimerMusic
+export const selectActiveTimerMusic = (state: RootState) =>
+	state.timers.activeTimerMusic

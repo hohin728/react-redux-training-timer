@@ -1,12 +1,13 @@
 import { calcTimerRemainTime } from "./timerService"
 import { cloneDeep, throttle } from "lodash"
 import TimerType, { SavedTimerType } from "../types/Timer"
+import { Dictionary } from "@reduxjs/toolkit"
 
 export const loadTimersState = ():
 	| undefined
 	| {
 			ids: string[]
-			entities: object
+			entities: Dictionary<TimerType>
 			totalLoop: number
 	  } => {
 	try {

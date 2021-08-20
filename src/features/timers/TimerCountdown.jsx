@@ -68,7 +68,7 @@ const TimerCountdown = ({ alarmPlayer }) => {
 				if (activeTimerId === lastTimerId) {
 					// if loop count has reached the end
 					if (loopCurrent < loopTotal) {
-						dispatch(timerSetCurrentLoop({ current: loopCurrent + 1 }))
+						dispatch(timerSetCurrentLoop(loopCurrent + 1))
 						// reset remain time of every timer
 						dispatch(timerResetRemainTime())
 						dispatch(timerSetNextTimer())

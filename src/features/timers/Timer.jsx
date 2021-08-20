@@ -66,7 +66,7 @@ const Timer = ({ id }) => {
 			timeUnit,
 		} = params
 
-		dispatch(timerSetTime(timer.id, value, timeUnit))
+		dispatch(timerSetTime(timer.id, parseInt(value), timeUnit))
 	}
 
 	const handleLabelChange = (e) =>

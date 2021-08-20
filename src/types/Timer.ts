@@ -1,8 +1,8 @@
-import { Dictionary } from "@reduxjs/toolkit"
+import { Dictionary, EntityId } from "@reduxjs/toolkit"
 import TimerStatus from "../features/timers/TimerStatus"
 
 export type TimersStateType = {
-	ids: string[]
+	ids: EntityId[]
 	entities: Dictionary<TimerType>
 	showCountdown: boolean
 	delay: number
