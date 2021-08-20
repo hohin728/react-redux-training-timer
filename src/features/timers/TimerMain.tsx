@@ -23,7 +23,7 @@ const TimerMain = ({ heightOfMainSection }: Props) => {
 
 	const timerStatus = useSelector(selectTimerStatus)
 	const showCountdown = useSelector(selectShowCountdown)
-	const alarmPlayer = useRef(null)
+	const alarmPlayer = useRef<ReactHowler>(null)
 
 	if (timerStatus === TimerStatus.RUNNING || showCountdown) {
 		return (

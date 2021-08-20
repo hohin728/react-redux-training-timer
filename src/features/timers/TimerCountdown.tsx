@@ -20,6 +20,9 @@ import { convertTimeFormatForDisplay } from "../../services/timerService"
 
 import { Box, Typography, makeStyles } from "@material-ui/core"
 
+import { RootState } from "../../store"
+import ReactHowler from "react-howler"
+
 const useStyles = makeStyles({
 	digits: {
 		margin: 10,
@@ -36,28 +39,41 @@ const useStyles = makeStyles({
 	},
 })
 
-const TimerCountdown = ({ alarmPlayer }) => {
+type Props = {
+	alarmPlayer: React.RefObject<ReactHowler>
+}
+
+const TimerCountdown = ({ alarmPlayer }: Props) => {
 	const dispatch = useDispatch()
 	const classes = useStyles()
 
 	const activeTimerId = useSelector(selectActiveTimerId)
-	const timer = useSelector((state) => selectTimerById(state, activeTimerId))
-	const delay = useSelector((state) => selectTimerDelay(state))
+	const timer = useSelector((state: RootState) =>
+		selectTimerById(state, activeTimerId ?? "")
+	)
+	const delay = useSelector((state: RootState) => selectTimerDelay(state))
 	const timerStatus = useSelector(selectTimerStatus)
 	const lastTimerId = useSelector(selectLastTimerId)
 	const loopCurrent = useSelector(selectTimerLoopCurrentCount)
 	const loopTotal = useSelector(selectTimerLoopTotalCount)
 
-	const timePerUnit = convertTimeFormatForDisplay(timer.remainTime)
+	const timePerUnit = convertTimeFormatForDisplay(timer ? timer.remainTime : 0)
 
-	const showTimerDigits = (digit) => (digit < 10 ? "0" + digit : digit)
+	const showTimerDigits = (digit: number): string =>
+		digit < 10 ? "0" + digit : digit.toString()
 
 	useInterval(
 		() => {
+			if (!timer) {
+				return
+			}
+
 			dispatch(timerDeductTime({ timerId: timer.id, delay }))
 
 			if (timer.remainTime - delay <= 0) {
-				alarmPlayer.current.play()
+				if (alarmPlayer && alarmPlayer.current) {
+					alarmPlayer.current.howler.play()
+				}
 
 				/**
 				 * if it's the last timer, check if the loop count reaches total
@@ -82,6 +98,7 @@ const TimerCountdown = ({ alarmPlayer }) => {
 		},
 		timerStatus === TimerStatus.RUNNING &&
 			activeTimerId &&
+			timer &&
 			timer.id === activeTimerId
 			? delay
 			: null
@@ -99,7 +116,7 @@ const TimerCountdown = ({ alarmPlayer }) => {
 				height="100%"
 			>
 				<Typography variant="h4" component="div" style={{ marginBottom: 10 }}>
-					{timer.label}
+					{timer ? timer.label : ""}
 				</Typography>
 
 				<Box
