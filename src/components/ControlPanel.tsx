@@ -62,7 +62,15 @@ const useStyles = makeStyles((theme) => ({
 	},
 }))
 
-const ControlPanel = ({ setHeightOfControlPanel, handleModalStatus }) => {
+type Props = {
+	setHeightOfControlPanel: React.Dispatch<React.SetStateAction<number>>
+	handleModalStatus: (e: {} | React.ChangeEvent<Element>, open: boolean) => void
+}
+
+const ControlPanel = ({
+	setHeightOfControlPanel,
+	handleModalStatus,
+}: Props) => {
 	const classes = useStyles()
 	const dispatch = useDispatch()
 
@@ -98,7 +106,12 @@ const ControlPanel = ({ setHeightOfControlPanel, handleModalStatus }) => {
 	const handleToggleMusicMuted = () =>
 		dispatch(timerToggledMute({ muteType: "music" }))
 
-	const handleLoopChanged = (e) => dispatch(timerSetTotalLoop(e.target.value))
+	const handleLoopChanged = (
+		e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+	) => {
+		const value = e.target.value as number | ""
+		dispatch(timerSetTotalLoop(value))
+	}
 
 	const handleAddTimer = () =>
 		dispatch(
@@ -107,8 +120,11 @@ const ControlPanel = ({ setHeightOfControlPanel, handleModalStatus }) => {
 
 	// get the height of control panel to render the height of main section
 	useEffect(() => {
-		const height = document.getElementById("control-panel").clientHeight
-		setHeightOfControlPanel(height)
+		const controlPanelElem = document.getElementById("control-panel")
+		if (controlPanelElem) {
+			const height = controlPanelElem.clientHeight
+			setHeightOfControlPanel(height)
+		}
 	})
 
 	return (
@@ -177,9 +193,7 @@ const ControlPanel = ({ setHeightOfControlPanel, handleModalStatus }) => {
 							onChange={handleLoopChanged}
 							disabled={showCountdown}
 							size="small"
-							error={
-								Number.isNaN(parseInt(loopTotal)) || parseInt(loopTotal) < 1
-							}
+							error={Number.isNaN(loopTotal) || loopTotal < 1}
 						/>
 					</FormControl>
 				</Box>

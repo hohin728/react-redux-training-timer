@@ -26,6 +26,15 @@ export type SavedTimerType = TimerInputType & {
 	music: string
 }
 
+export type SavingTimeType = {
+	id?: string
+	label?: string
+	music?: string
+	minute?: number | ""
+	second?: number | ""
+	remainTime?: number
+}
+
 export type TimerInputType = {
 	minute: number | ""
 	second: number | ""

@@ -1,6 +1,6 @@
 import { isInteger } from "lodash"
 import { v4 as uuidv4 } from "uuid"
-import TimerType, { TimerInputType, SavedTimerType } from "../types/Timer"
+import TimerType, { TimerInputType, SavingTimeType } from "../types/Timer"
 
 // default time when user's preference is not found
 export const defaultMinuteIfNotSaved = 1
@@ -20,17 +20,17 @@ export const calcTimerRemainTime = (params: TimerInputType): number => {
 	return 0
 }
 
-export const createTimer = (params?: SavedTimerType): TimerType => {
+export const createTimer = (params?: SavingTimeType): TimerType => {
 	const id = params && params.id ? params.id : uuidv4()
-	const timer = {
+	const timer: TimerType = {
 		id: id,
 		label: params && params.label ? params.label : "",
 		minute:
-			params && params.minute !== null
+			params !== undefined && params.minute !== undefined
 				? params.minute
 				: defaultMinuteIfNotSaved,
 		second:
-			params && params.second !== null
+			params !== undefined && params.second !== undefined
 				? params.second
 				: defaultSecondIfNotSaved,
 		remainTime: 0,
