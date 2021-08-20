@@ -1,6 +1,6 @@
-enum TimerUnit {
+enum TimeUnit {
 	MINUTE = "minute",
 	SECOND = "second",
 }
 
-export default TimerUnit
+export default TimeUnit

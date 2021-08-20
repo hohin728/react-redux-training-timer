@@ -25,7 +25,7 @@ import {
 	Typography,
 } from "@material-ui/core"
 import SettingsIcon from "@material-ui/icons/Settings"
-import TimerUnit from "../timers/TimerUnits"
+import TimeUnit from "../timers/TimeUnit"
 
 const useStyles = makeStyles({
 	formControl: {
@@ -61,7 +61,7 @@ const Settings = ({ open, handleOpen }: Props) => {
 
 	const handleTimeChange = (params: {
 		event: React.ChangeEvent<HTMLInputElement>
-		timeUnit: TimerUnit
+		timeUnit: TimeUnit
 	}) => {
 		const {
 			event: {

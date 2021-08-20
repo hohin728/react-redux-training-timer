@@ -9,11 +9,10 @@ import {
 	isValidTimeInput,
 } from "../../services/timerService"
 import TimerStatus from "./TimerStatus"
-import { isInteger } from "lodash"
 import { loadTimersState } from "../../services/localStorage"
 import TimerType, { TimersStateType } from "../../types/Timer"
 import { PayloadAction } from "@reduxjs/toolkit"
-import TimerUnit from "./TimerUnits"
+import TimeUnit from "./TimeUnit"
 import { RootState } from "../../store"
 
 const timersAdapter = createEntityAdapter<TimerType>()
@@ -96,7 +95,7 @@ const timersSlice = createSlice({
 				action: PayloadAction<{
 					timerId: string
 					value: number | ""
-					timeUnit: TimerUnit
+					timeUnit: TimeUnit
 				}>
 			) {
 				const { timerId, value, timeUnit } = action.payload
