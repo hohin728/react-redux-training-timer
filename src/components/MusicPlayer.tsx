@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react"
 import TimerStatus from "../features/timers/TimerStatus"
-import { useSelector, useDispatch } from "react-redux"
+import { useAppSelector, useAppDispatch } from "../hooks/hooks"
 import {
 	selectTimerStatus,
 	selectTimerIsMuted,
@@ -12,12 +12,12 @@ import ReactHowler from "react-howler"
 import muayThaiBgMusic from "../audio/Muay_Thai_Sarama_ROUND_1.mp3"
 
 const MusicPlayer = () => {
-	const dispatch = useDispatch()
+	const dispatch = useAppDispatch()
 
-	const timerStatus = useSelector(selectTimerStatus)
-	const isMuted = useSelector(selectTimerIsMuted)
-	const activeTimerId = useSelector(selectActiveTimerId)
-	const music = useSelector(selectActiveTimerMusic)
+	const timerStatus = useAppSelector(selectTimerStatus)
+	const isMuted = useAppSelector(selectTimerIsMuted)
+	const activeTimerId = useAppSelector(selectActiveTimerId)
+	const music = useAppSelector(selectActiveTimerMusic)
 
 	const musicPlayer = useRef<ReactHowler>(null)
 

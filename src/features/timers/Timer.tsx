@@ -1,5 +1,5 @@
 import React from "react"
-import { useSelector, useDispatch } from "react-redux"
+import { useAppSelector, useAppDispatch } from "../../hooks/hooks"
 import TimeInputField from "../../components/TimeInputField"
 import {
 	selectTimerById,
@@ -22,7 +22,6 @@ import {
 import HighlightOffIcon from "@material-ui/icons/HighlightOff"
 
 import TimeUnit from "./TimeUnit"
-import { RootState } from "../../store"
 
 type Props = {
 	id: string
@@ -61,9 +60,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Timer = ({ id }: Props) => {
-	const dispatch = useDispatch()
+	const dispatch = useAppDispatch()
 	const classes = useStyles()
-	const timer = useSelector((state: RootState) => selectTimerById(state, id))
+	const timer = useAppSelector((state) => selectTimerById(state, id))
 
 	const handleTimeChange = (params: {
 		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

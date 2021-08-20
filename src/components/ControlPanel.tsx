@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { useSelector, useDispatch } from "react-redux"
+import { useAppSelector, useAppDispatch } from "../hooks/hooks"
 import {
 	timerStatusUpdated,
 	selectActiveTimerId,
@@ -72,15 +72,15 @@ const ControlPanel = ({
 	handleModalStatus,
 }: Props) => {
 	const classes = useStyles()
-	const dispatch = useDispatch()
+	const dispatch = useAppDispatch()
 
-	const timerStatus = useSelector(selectTimerStatus)
-	const activeTimerId = useSelector(selectActiveTimerId)
-	const loopTotal = useSelector(selectTimerLoopTotalCount)
-	const isMuted = useSelector(selectTimerIsMuted)
-	const showCountdown = useSelector(selectShowCountdown)
-	const defaultMinute = useSelector(selectDefaultMinute)
-	const defaultSecond = useSelector(selectDefaultSecond)
+	const timerStatus = useAppSelector(selectTimerStatus)
+	const activeTimerId = useAppSelector(selectActiveTimerId)
+	const loopTotal = useAppSelector(selectTimerLoopTotalCount)
+	const isMuted = useAppSelector(selectTimerIsMuted)
+	const showCountdown = useAppSelector(selectShowCountdown)
+	const defaultMinute = useAppSelector(selectDefaultMinute)
+	const defaultSecond = useAppSelector(selectDefaultSecond)
 
 	const handleStart = () => {
 		if (!activeTimerId) {

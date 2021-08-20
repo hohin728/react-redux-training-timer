@@ -1,7 +1,7 @@
 import React, { useRef } from "react"
 import TimerList from "./TimerList"
 import TimerCountdown from "./TimerCountdown"
-import { useSelector } from "react-redux"
+import { useAppSelector } from "../../hooks/hooks"
 import { selectShowCountdown, selectTimerStatus } from "./timersSlice"
 import TimerStatus from "./TimerStatus"
 import timesUpSfx from "../../audio/timesup.mp3"
@@ -21,8 +21,8 @@ type Props = {
 const TimerMain = ({ heightOfMainSection }: Props) => {
 	const classes = useStyles()
 
-	const timerStatus = useSelector(selectTimerStatus)
-	const showCountdown = useSelector(selectShowCountdown)
+	const timerStatus = useAppSelector(selectTimerStatus)
+	const showCountdown = useAppSelector(selectShowCountdown)
 	const alarmPlayer = useRef<ReactHowler>(null)
 
 	if (timerStatus === TimerStatus.RUNNING || showCountdown) {

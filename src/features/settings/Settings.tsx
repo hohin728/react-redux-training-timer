@@ -1,5 +1,5 @@
 import React from "react"
-import { useSelector, useDispatch } from "react-redux"
+import { useAppSelector, useAppDispatch } from "../../hooks/hooks"
 import { selectTimerDelay, timerDelayUpdated } from "../timers/timersSlice"
 import {
 	toggleDarkMode,
@@ -39,13 +39,13 @@ type Props = {
 }
 
 const Settings = ({ open, handleOpen }: Props) => {
-	const dispatch = useDispatch()
+	const dispatch = useAppDispatch()
 	const classes = useStyles()
 
-	const delay = useSelector(selectTimerDelay)
-	const isDarkMode = useSelector(selectIsDarkMode)
-	const defaultMinute = useSelector(selectDefaultMinute)
-	const defaultSecond = useSelector(selectDefaultSecond)
+	const delay = useAppSelector(selectTimerDelay)
+	const isDarkMode = useAppSelector(selectIsDarkMode)
+	const defaultMinute = useAppSelector(selectDefaultMinute)
+	const defaultSecond = useAppSelector(selectDefaultSecond)
 
 	const handleDarkModeToggle = () => dispatch(toggleDarkMode())
 

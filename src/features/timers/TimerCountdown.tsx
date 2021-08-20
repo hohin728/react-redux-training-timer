@@ -1,5 +1,5 @@
 import React from "react"
-import { useSelector, useDispatch } from "react-redux"
+import { useAppSelector, useAppDispatch } from "../../hooks/hooks"
 import {
 	selectTimerById,
 	selectActiveTimerId,
@@ -20,7 +20,6 @@ import { convertTimeFormatForDisplay } from "../../services/timerService"
 
 import { Box, Typography, makeStyles } from "@material-ui/core"
 
-import { RootState } from "../../store"
 import ReactHowler from "react-howler"
 
 const useStyles = makeStyles({
@@ -44,18 +43,18 @@ type Props = {
 }
 
 const TimerCountdown = ({ alarmPlayer }: Props) => {
-	const dispatch = useDispatch()
+	const dispatch = useAppDispatch()
 	const classes = useStyles()
 
-	const activeTimerId = useSelector(selectActiveTimerId)
-	const timer = useSelector((state: RootState) =>
+	const activeTimerId = useAppSelector(selectActiveTimerId)
+	const timer = useAppSelector((state) =>
 		selectTimerById(state, activeTimerId ?? "")
 	)
-	const delay = useSelector((state: RootState) => selectTimerDelay(state))
-	const timerStatus = useSelector(selectTimerStatus)
-	const lastTimerId = useSelector(selectLastTimerId)
-	const loopCurrent = useSelector(selectTimerLoopCurrentCount)
-	const loopTotal = useSelector(selectTimerLoopTotalCount)
+	const delay = useAppSelector(selectTimerDelay)
+	const timerStatus = useAppSelector(selectTimerStatus)
+	const lastTimerId = useAppSelector(selectLastTimerId)
+	const loopCurrent = useAppSelector(selectTimerLoopCurrentCount)
+	const loopTotal = useAppSelector(selectTimerLoopTotalCount)
 
 	const timePerUnit = convertTimeFormatForDisplay(timer ? timer.remainTime : 0)
 
