@@ -1,3 +1,6 @@
+import { Middleware } from "redux"
+import { RootStateOrAny } from "react-redux"
+
 import {
 	timerAdded,
 	timerDeleted,
@@ -28,22 +31,23 @@ const settingsActionsToReserve = [toggleDarkMode, setDefaultTime].map(
 	(action) => action.type
 )
 
-const reserver = (store) => (next) => (action) => {
-	const currentAction = action.type
+const reserver: Middleware<{}, RootStateOrAny> =
+	(store) => (next) => (action) => {
+		const currentAction = action.type
 
-	let result = next(action)
+		let result = next(action)
 
-	if (timersActionsToReserve.includes(currentAction)) {
-		saveState({
-			timers: store.getState().timers,
-		})
-	} else if (settingsActionsToReserve.includes(currentAction)) {
-		saveState({
-			settings: store.getState().settings,
-		})
+		if (timersActionsToReserve.includes(currentAction)) {
+			saveState({
+				timers: store.getState().timers,
+			})
+		} else if (settingsActionsToReserve.includes(currentAction)) {
+			saveState({
+				settings: store.getState().settings,
+			})
+		}
+
+		return result
 	}
-
-	return result
-}
 
 export default reserver

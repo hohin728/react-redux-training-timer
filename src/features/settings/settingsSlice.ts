@@ -5,7 +5,7 @@ import {
 } from "../../services/timerService"
 import { loadSettingsState } from "../../services/localStorage"
 
-import { RootState } from "../../store"
+import { RootState } from "../../types/redux"
 import { PayloadAction } from "@reduxjs/toolkit"
 import SettingsStateType from "../../types/Settings"
 

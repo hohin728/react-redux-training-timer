@@ -13,7 +13,7 @@ import { loadTimersState } from "../../services/localStorage"
 import TimerType, { TimersStateType } from "../../types/Timer"
 import { PayloadAction } from "@reduxjs/toolkit"
 import TimeUnit from "./TimeUnit"
-import { RootState } from "../../store"
+import { RootState } from "../../types/redux"
 
 const timersAdapter = createEntityAdapter<TimerType>()
 
