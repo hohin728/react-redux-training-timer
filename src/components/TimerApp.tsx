@@ -34,11 +34,10 @@ const TimerApp = () => {
 		setHeightOfMainSection(heightOfMainSection)
 	}
 
-	const handleModalStatus = (e, open) => {
-		if (typeof open === "boolean") {
-			openModal(open)
-		}
-	}
+	const handleModalStatus = (
+		e: {} | React.ChangeEvent<Element>,
+		open: boolean
+	) => openModal(open)
 
 	useCallback(setHeight, [heightOfControlPanel])
 
@@ -53,7 +52,7 @@ const TimerApp = () => {
 
 	return (
 		<Paper elevation={0} className={`App ${classes.app}`}>
-			<Box className={classes.mainSection}>
+			<Box>
 				<TimerMain heightOfMainSection={heightOfMainSection} />
 			</Box>
 
