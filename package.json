@@ -53,6 +53,7 @@
 	},
 	"devDependencies": {
 		"@types/lodash": "^4.14.172",
+		"@types/react-howler": "^3.7.3",
 		"@types/uuid": "^8.3.1",
 		"gh-pages": "^3.2.3"
 	}

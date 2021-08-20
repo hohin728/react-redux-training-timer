@@ -14,7 +14,11 @@ const useStyles = makeStyles({
 	},
 })
 
-const TimerMain = ({ heightOfMainSection }) => {
+type Props = {
+	heightOfMainSection: number
+}
+
+const TimerMain = ({ heightOfMainSection }: Props) => {
 	const classes = useStyles()
 
 	const timerStatus = useSelector(selectTimerStatus)
