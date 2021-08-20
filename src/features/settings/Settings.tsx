@@ -60,7 +60,7 @@ const Settings = ({ open, handleOpen }: Props) => {
 	}
 
 	const handleTimeChange = (params: {
-		event: React.ChangeEvent<HTMLInputElement>
+		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 		timeUnit: TimeUnit
 	}) => {
 		const {
@@ -124,7 +124,7 @@ const Settings = ({ open, handleOpen }: Props) => {
 							label="Minute"
 							handleChange={handleTimeChange}
 							value={defaultMinute}
-							timeUnit="minute"
+							timeUnit={TimeUnit.MINUTE}
 							styles={{ marginTop: 20, marginRight: 20 }}
 						/>
 						<TimeInputField
@@ -132,7 +132,7 @@ const Settings = ({ open, handleOpen }: Props) => {
 							label="Second"
 							handleChange={handleTimeChange}
 							value={defaultSecond}
-							timeUnit="second"
+							timeUnit={TimeUnit.SECOND}
 							styles={{ marginTop: 20 }}
 						/>
 					</Grid>

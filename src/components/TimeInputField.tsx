@@ -2,6 +2,7 @@ import React from "react"
 import { isValidTimeInput } from "../services/timerService"
 
 import { TextField, makeStyles } from "@material-ui/core"
+import TimeUnit from "../features/timers/TimeUnit"
 
 const useStyles = makeStyles({
 	timerInput: {
@@ -9,15 +10,39 @@ const useStyles = makeStyles({
 	},
 })
 
+type Props = {
+	id: string
+	label: string
+	handleChange: ({
+		event,
+		timeUnit,
+	}: {
+		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+		timeUnit: TimeUnit
+	}) => void
+	value: number | ""
+	timeUnit: TimeUnit
+	styles?: {}
+}
+
 const TimeInputField = ({
-	id, // string
-	label, // string
-	handleChange, // function
-	value, // timer.second or timer.minute
-	timeUnit, // "second" || "minute"
-	styles, // style objects
-}) => {
+	id,
+	label,
+	handleChange,
+	value,
+	timeUnit,
+	styles,
+}: Props) => {
 	const classes = useStyles()
+
+	const displayError = () => {
+		if (value === "") {
+			return true
+		}
+		return !isValidTimeInput({
+			value,
+		})
+	}
 
 	return (
 		<TextField
@@ -37,12 +62,7 @@ const TimeInputField = ({
 			}}
 			onChange={(e) => handleChange({ event: e, timeUnit })}
 			value={value}
-			error={
-				!isValidTimeInput({
-					value,
-					timeUnit,
-				})
-			}
+			error={displayError()}
 		/>
 	)
 }

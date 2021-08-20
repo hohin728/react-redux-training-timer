@@ -73,19 +73,9 @@ export const convertTimeFormatForDisplay = (
 
 export const getInvalidTimeInputMessage = ({
 	value,
-	timeUnit,
 }: {
 	value: number
-	timeUnit: "minute" | "second"
 }): string => {
-	if (timeUnit !== "minute" && timeUnit !== "second") {
-		// console.log("Time unit must be either 'minute' or 'second'")
-		return "Time unit must be either 'minute' or 'second'"
-	}
-	if (!Number.isInteger(value)) {
-		// console.log("Time value must be an integer")
-		return "Time value must be an integer"
-	}
 	if (value < 0 || value > 59) {
 		// console.log("Time value must be between 0 and 59")
 		return "Time value must be between 0 and 59"
@@ -93,12 +83,5 @@ export const getInvalidTimeInputMessage = ({
 	return ""
 }
 
-export const isValidTimeInput = ({
-	value,
-	timeUnit,
-}: {
-	value: number
-	timeUnit: "minute" | "second"
-}): boolean => {
-	return getInvalidTimeInputMessage({ value, timeUnit }) === ""
-}
+export const isValidTimeInput = ({ value }: { value: number }): boolean =>
+	getInvalidTimeInputMessage({ value }) === ""

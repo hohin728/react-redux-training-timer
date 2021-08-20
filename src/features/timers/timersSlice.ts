@@ -105,7 +105,7 @@ const timersSlice = createSlice({
 					timer[timeUnit] = value
 
 					if (timer.minute !== "" && timer.second !== "" && value !== "") {
-						timer.remainTime = isValidTimeInput({ value, timeUnit })
+						timer.remainTime = isValidTimeInput({ value })
 							? (timer.minute * 60 + timer.second) * 1000
 							: 0
 					}
