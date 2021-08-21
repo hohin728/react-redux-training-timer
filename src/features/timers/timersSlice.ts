@@ -250,7 +250,7 @@ export const selectShowCountdown = (state: RootState) =>
 
 export const selectTimerDelay = (state: RootState) => state.timers.delay
 
-export const selectActiveTimerId = (state: RootState) =>
+export const selectActiveTimerId = (state: RootState): string | null =>
 	state.timers.activeTimerId
 
 export const selectTimerStatus = (state: RootState) => state.timers.status
